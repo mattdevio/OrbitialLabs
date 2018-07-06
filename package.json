@@ -1,0 +1,19 @@
+{
+  "name": "orbitallabs",
+  "version": "1.0.0",
+  "description": "A messenger application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattgreenberg/OrbitialLabs.git"
+  },
+  "author": "Orbitial Labs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mattgreenberg/OrbitialLabs/issues"
+  },
+  "homepage": "https://github.com/mattgreenberg/OrbitialLabs#readme"
+}
