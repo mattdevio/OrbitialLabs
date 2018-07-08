@@ -1,26 +1,60 @@
 /*----------  Vendor Imports  ----------*/
 import webpack from 'webpack';
 import path from 'path';
+import fs from 'fs';
+import { promisify } from 'util';
 
-/*----------  Custom Imports  ----------*/
-import * as config from 'config.js';
+/*----------  Setup  ----------*/
+const readFileAsync = promisify(fs.readFile);
 
-export default {
+/*----------  Main Export  ----------*/
+export default (async function () {
 
-  entry: {
-    polyfill: '@babel/polyfill',
-    app: path.resolve(__dirname, '../src/index.jsx'),
-  },
+  // Load the Babel Config from .babelrc
+  let babelRc;
+  try {
+    babelRc = await readFileAsync(
+      path.resolve(__dirname, '../.babelrc'), 
+      {encoding: 'utf8'},
+    );
+    babelRc = JSON.parse(babelRc);
+  } catch (e) {
+    throw e;
+  }
 
-  output: {
-    filename: '[name]-[chunkhash:8].bundle.js',
-    path: path.resolve(__dirname, '../public'),
-    publicPath: '/',
-  },
+  return {
 
-  resolve: {
-    extensions: ['.jsx', '.js'],
-    modules: [path.resolve(__dirname, '../src'), 'node_modules'],
-  },
+    entry: {
+      polyfill: '@babel/polyfill',
+      app: path.resolve(__dirname, '../src/index.jsx'),
+    },
 
-};
+    output: {
+      filename: '[name]-[chunkhash:8].bundle.js',
+      path: path.resolve(__dirname, '../public'),
+      publicPath: '/',
+    },
+
+    resolve: {
+      extensions: ['.jsx', '.js'],
+      modules: [path.resolve(__dirname, '../src'), 'node_modules'],
+    },
+
+    module: {
+      rules: [
+        { // Transpile es6 and react jsx into web-safe code
+          test: /\.(js|jsx)$/,
+          exclude: /(node_modules)/,
+          use: {
+            loader: '@babel/loader',
+            options: babelRc,
+          },
+        },
+      ],
+    },
+
+  };
+
+})();
+
+
