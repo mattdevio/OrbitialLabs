@@ -16,11 +16,15 @@
     "url": "https://github.com/mattgreenberg/OrbitialLabs/issues"
   },
   "homepage": "https://github.com/mattgreenberg/OrbitialLabs#readme",
-  "dependencies": {
+  "devdependencies": {
     "@babel/core": "^7.0.0-beta.52",
     "@babel/polyfill": "^7.0.0-beta.52",
     "@babel/preset-env": "^7.0.0-beta.52",
     "babel-loader": "^8.0.0-beta.4",
     "webpack": "^4.15.1"
+  },
+  "dependencies": {
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1"
   }
 }
