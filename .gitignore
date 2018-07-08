@@ -104,5 +104,9 @@ typings/
 # Serverless directories
 .serverless
 
+# Don't Commit This Stuff
+public
+config/config.js
+
 
 # End of https://www.gitignore.io/api/node,macos
