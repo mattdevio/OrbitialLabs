@@ -29,6 +29,7 @@
     "@babel/preset-env": "^7.0.0-beta.52",
     "@babel/preset-react": "^7.0.0-beta.52",
     "babel-loader": "^8.0.0-beta.4",
-    "webpack": "^4.15.1"
+    "webpack": "^4.15.1",
+    "webpack-merge": "^4.1.3"
   }
 }

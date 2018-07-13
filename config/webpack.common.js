@@ -53,6 +53,12 @@ export default (async function () {
       ],
     },
 
+    optimization: {
+      splitChunks: {
+        chunks: 'all',
+      },
+    },
+
   };
 
 })();
