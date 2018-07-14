@@ -12,23 +12,25 @@ const merge = require('webpack-merge');
 /*----------  Custom Imports  ----------*/
 const { log } = require('./utility');
 
-/*----------  Setup  ----------*/
+// Server Configuration Object
 const config = {
   port: process.env.PORT || 3000,
   NODE_ENV: process.env.NODE_ENV || 'development',
 };
 
-let webpackConfig = config.NODE_ENV === 'development' ?
+// Webpack Config
+const webpackConfig = config.NODE_ENV === 'development' ?
   require('../config/webpack.dev.js') :
   require('../config/webpack.prod.js');
 
+// Start Express
 const app = express();
 app.use(morgan('dev'));
-
 app.listen(config.port, () => {
   log.info(`Server is listening on http://localhost:${config.port}`);
 });
 
+// Serve webpack bundles
 (async () => {
   
   const baseConfig = await common();
