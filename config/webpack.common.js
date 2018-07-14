@@ -1,14 +1,14 @@
 /*----------  Vendor Imports  ----------*/
-import webpack from 'webpack';
-import path from 'path';
-import fs from 'fs';
-import { promisify } from 'util';
+const webpack = require('webpack');
+const path = require('path');
+const fs = require('fs');
+const { promisify } = require('util');
 
 /*----------  Setup  ----------*/
 const readFileAsync = promisify(fs.readFile);
 
 /*----------  Main Export  ----------*/
-export default (async function () {
+module.exports = async function () {
 
   // Load the Babel Config from .babelrc
   let babelRc;
@@ -19,7 +19,7 @@ export default (async function () {
     );
     babelRc = JSON.parse(babelRc);
   } catch (e) {
-    throw e;
+    console.log(e)
   }
 
   return {
@@ -30,7 +30,7 @@ export default (async function () {
     },
 
     output: {
-      filename: '[name]-[chunkhash:8].bundle.js',
+      filename: '[name].bundle.js',
       path: path.resolve(__dirname, '../public'),
       publicPath: '/',
     },
@@ -46,21 +46,21 @@ export default (async function () {
           test: /\.(js|jsx)$/,
           exclude: /(node_modules)/,
           use: {
-            loader: '@babel/loader',
+            loader: 'babel-loader',
             options: babelRc,
           },
         },
       ],
     },
 
-    optimization: {
-      splitChunks: {
-        chunks: 'all',
-      },
-    },
+    plugins: [
+      new webpack.DefinePlugin({
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      }),
+    ],
 
   };
 
-})();
+};
 
 
