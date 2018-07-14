@@ -2,9 +2,6 @@
 const winston = require('winston');
 const path = require('path');
 
-/*----------  Setup  ----------*/
-const tsFormat = () => (new Date()).toLocaleTimeString();
-
 /**
  * Winston Logger - Can write errors to file
  */
@@ -27,4 +24,6 @@ const logger = winston.createLogger({
     }),
   ],
 });
+
+// Export Logger as `log`
 module.exports.log = logger;

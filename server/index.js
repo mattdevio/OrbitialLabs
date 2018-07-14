@@ -1,11 +1,10 @@
 /*----------  Vendor Imports  ----------*/
 const express = require('express');
-const bodyParse = require('body-parser');
+const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const webpack = require('webpack');
 const wdm = require('webpack-dev-middleware');
 const path = require('path');
-const babel = require('@babel/core');
 const common = require('../config/webpack.common.js');
 const merge = require('webpack-merge');
 
@@ -29,6 +28,8 @@ const webpackConfig = config.NODE_ENV === 'development' ?
 const app = express();
 
 // Add Middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.set('view engine', 'pug');
 app.set('views', path.resolve(__dirname, './views'));
@@ -36,7 +37,7 @@ app.use('/assets', express.static(path.resolve(__dirname, './assets')));
 
 // Mount Routers
 app.use(FileRouter);
-app.use('api', ApiRouter);
+app.use('/api', ApiRouter);
 
 // Bind Listening Port
 app.listen(config.port, () => {
@@ -52,6 +53,6 @@ app.listen(config.port, () => {
 
   app.use(wdm(compiler, {
     publicPath: fullWebpackConfig.output.publicPath,
-  }))
+  }));
 
 })();
