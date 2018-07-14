@@ -1,11 +1,14 @@
 /*----------  Vendor Imports  ----------*/
-import React from 'react';
-import { Render } from 'react-dom';
+import React, { Fragment } from 'react';
+import { render } from 'react-dom';
 
 /*----------  Custom Imports  ----------*/
+// There are none yet
 
-
-Render(
-  <h1>React Works</h1>,
+render(
+  <Fragment>
+    <h1>React Works</h1>
+    <img src="/assets/images/test.png" />
+  </Fragment>,
   document.getElementById('root'),
 );

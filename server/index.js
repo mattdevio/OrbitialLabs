@@ -11,6 +11,8 @@ const merge = require('webpack-merge');
 
 /*----------  Custom Imports  ----------*/
 const { log } = require('./utility');
+const FileRouter = require('./router/file');
+const ApiRouter = require('./router/api');
 
 // Server Configuration Object
 const config = {
@@ -25,7 +27,18 @@ const webpackConfig = config.NODE_ENV === 'development' ?
 
 // Start Express
 const app = express();
+
+// Add Middleware
 app.use(morgan('dev'));
+app.set('view engine', 'pug');
+app.set('views', path.resolve(__dirname, './views'));
+app.use('/assets', express.static(path.resolve(__dirname, './assets')));
+
+// Mount Routers
+app.use(FileRouter);
+app.use('api', ApiRouter);
+
+// Bind Listening Port
 app.listen(config.port, () => {
   log.info(`Server is listening on http://localhost:${config.port}`);
 });
