@@ -36,6 +36,7 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+error.log*
 
 # Runtime data
 pids
@@ -103,6 +104,10 @@ typings/
 
 # Serverless directories
 .serverless
+
+# Don't Commit This Stuff
+public
+config/config.js
 
 
 # End of https://www.gitignore.io/api/node,macos
