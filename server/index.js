@@ -7,11 +7,14 @@ const wdm = require('webpack-dev-middleware');
 const path = require('path');
 const common = require('../config/webpack.common.js');
 const merge = require('webpack-merge');
+const socketIO = require('socket.io');
+const http = require('http');
 
 /*----------  Custom Imports  ----------*/
 const { log } = require('./utility');
 const FileRouter = require('./router/file');
 const ApiRouter = require('./router/api');
+const BindEventMiddleware = require('./events');
 
 // Server Configuration Object
 const config = {
@@ -26,6 +29,14 @@ const webpackConfig = config.NODE_ENV === 'development' ?
 
 // Start Express
 const app = express();
+const server = http.Server(app);
+
+// Start Socket.IO & Bind Event Middleware
+const io = socketIO(server, {
+  serveClient: false,
+  path: '/chat',
+});
+BindEventMiddleware(io);
 
 // Add Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -40,7 +51,7 @@ app.use(FileRouter);
 app.use('/api', ApiRouter);
 
 // Bind Listening Port
-app.listen(config.port, () => {
+server.listen(config.port, () => {
   log.info(`Server is listening on http://localhost:${config.port}`);
 });
 
