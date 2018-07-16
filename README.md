@@ -9,7 +9,25 @@ Public Square is a messenger application built by Orbital Labs; a small group of
 
 ___
 
+### Up And Running
 
+**ALERT: This project requires Node.js v8.11.3 (alias lts/carbon) or higher!**<br>
+
+Getting the project setup in your local enviornment is simple. Here are some commands to help you get started.
+
+```
+# Start by cloning the repo to your local machine
+git clone https://github.com/mattgreenberg/OrbitialLabs.git
+cd OrbitialLabs
+
+# Install all the required dependencies
+npm install
+
+# Start the application
+npm start
+```
+
+_Please Note: This project uses **ES-LINT** to help maintain coding standards. Please install your editor's **ES-LINT** plugin for inline linting feedback._
 
 
 <h2 align="center">Maintainers</h2>
