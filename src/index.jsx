@@ -1,6 +1,7 @@
 /*----------  Vendor Imports  ----------*/
-import React, { Fragment } from 'react';
+import React from 'react';
 import { render } from 'react-dom';
+import App from './app';
 import axios from 'axios';
 import io from 'socket.io-client';
 
@@ -8,10 +9,7 @@ import io from 'socket.io-client';
 
 // Test React
 render(
-  <Fragment>
-    <h1>React Works! :)</h1>
-    <img src="/assets/images/test.png" />
-  </Fragment>,
+  <App />,
   document.getElementById('root'),
 );
 
