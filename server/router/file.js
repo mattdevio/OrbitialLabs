@@ -8,7 +8,7 @@ const FileRouter = Router();
 =            FileRouter            =
 ==================================*/
 
-FileRouter.get('/', (req, res, next) => {
+FileRouter.get('*', (req, res, next) => {
 
   res.render('index', {
     bundles: ['app.bundle.js', 'polyfill.bundle.js'],
