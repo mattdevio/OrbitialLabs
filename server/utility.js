@@ -9,7 +9,7 @@ const logger = winston.createLogger({
   transports: [
     new winston.transports.File({ 
       level: 'error',
-      filename: path.resolve(__dirname, '../error.log'),
+      filename: path.resolve(__dirname, '../logs/error.log'),
       format: winston.format.combine(
         winston.format.timestamp(),
         winston.format.prettyPrint(),
