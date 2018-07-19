@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 /*----------  Custom Imports  ----------*/
+import Header from '../components/Header';
 import ThreeIconGroup from '../components/ThreeIconGroup';
 
 /*=========================================
@@ -11,6 +12,7 @@ import ThreeIconGroup from '../components/ThreeIconGroup';
 
 const Landing = () => (
   <LandingMainContainer>
+    <Header />
     <BackgroundGradient />
     <CenterStack>
       <CTAContainer>
@@ -30,8 +32,8 @@ export default Landing;
 
 const LandingMainContainer = styled.main`
   display: flex;
-  justify-content: center;
   height: 100vh;
+  justify-content: center;
   width: 100vw;
 `;
 
@@ -53,7 +55,7 @@ const CenterStack = styled.div`
 
 const CTAContainer = styled.div`
   align-items: flex-end;
-  height: 325;
+  height: 325px;
   display: flex;
 `;
 
@@ -63,12 +65,12 @@ const CallButton = styled.button.attrs({
   background: #FF6077;
   border: 0;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-  border-radius: 5;
+  border-radius: 5px;
   color: #fff;
   font-size: 18px;
   font-weight: 700;
   height: 75px;
-  letter-spacing: 1;
+  letter-spacing: 1px;
   width: 300px;
 `;
 
@@ -89,8 +91,6 @@ const DescriptionHeader = styled.h3.attrs({
 })`
   color: #585858;
   font-weight: 300;
-  letterSpacing: 1;
+  letterSpacing: 1px;
   text-align: center;
 `;
-
-
