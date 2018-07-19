@@ -46,10 +46,6 @@ app.set('view engine', 'pug');
 app.set('views', path.resolve(__dirname, './views'));
 app.use('/assets', express.static(path.resolve(__dirname, './assets')));
 
-// Mount Routers
-app.use(FileRouter);
-app.use('/api', ApiRouter);
-
 // Bind Listening Port
 server.listen(config.port, () => {
   log.info(`Server is listening on http://localhost:${config.port}`);
@@ -65,5 +61,9 @@ server.listen(config.port, () => {
   app.use(wdm(compiler, {
     publicPath: fullWebpackConfig.output.publicPath,
   }));
+
+  // Mount Routers
+  app.use('/api', ApiRouter);
+  app.use(FileRouter); // This one has to come last
 
 })();
