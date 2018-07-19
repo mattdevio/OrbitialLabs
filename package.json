@@ -4,7 +4,9 @@
   "description": "A messenger application",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server/index.js"
+    "prestart": "mongod --dbpath data --fork --logpath ./mongod.log",
+    "start": "nodemon server/index.js",
+    "poststop": "mongo admin --eval 'db.shutdownServer()' > ./mongod.log"
   },
   "repository": {
     "type": "git",
