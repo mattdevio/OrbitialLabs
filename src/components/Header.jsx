@@ -2,18 +2,34 @@
 import React from 'react';
 import styled from 'styled-components';
 
+/*----------  Custom Imports  ----------*/
+import history from '../services/history';
+
 /*=========================================
 =            Header Component            =
 =========================================*/
 
+const handleHome = () => history.replace('/');
+const handleAuth = () => history.replace('/auth');
+const handleRegister = () => history.replace('/register');
+const handleSignOut = () => history.replace('/');
+
+const UserLinks = () => {
+
+  const location = window.location.href;
+  if (location.includes('auth')) return <RegisterLink onClick={handleRegister} />;
+  else if (location.includes('chat')) return <SignOutLink onClick={handleSignOut} />;
+  else return <AuthLink onClick={handleAuth} />;
+};
+
 const Header = () => (
   <HeaderContainer>
     <BrandContainer>
-      <Logo src='./assets/images/logo.png'></Logo>
+      <Logo onClick={handleHome} src='./assets/images/logo.png'></Logo>
       <Name></Name>
     </BrandContainer>
     <AuthContainer>
-      <AuthLink />
+      {UserLinks()}
     </AuthContainer>
   </HeaderContainer>
 );
@@ -61,9 +77,7 @@ const AuthContainer = styled.section`
   width: 200px;
 `;
 
-const AuthLink = styled.button.attrs({
-  children: 'sign in',
-})`
+const LinkDefault = `
   background: transparent;
   border: 1px solid #fff;
   border-radius: 5px;
@@ -73,4 +87,22 @@ const AuthLink = styled.button.attrs({
   height: 50px;
   letter-spacing: 2px;
   width: 125px;
+`;
+
+const AuthLink = styled.button.attrs({
+  children: 'sign in',
+})`
+  ${LinkDefault}
+`;
+
+const RegisterLink = styled.button.attrs({
+  children: 'register',
+})`
+  ${LinkDefault}
+`;
+
+const SignOutLink = styled.button.attrs({
+  children: 'sign out',
+})`
+  ${LinkDefault}
 `;

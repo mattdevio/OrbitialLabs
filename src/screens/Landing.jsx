@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 /*----------  Custom Imports  ----------*/
+import history from '../services/history';
 import Header from '../components/Header';
 import ThreeIconGroup from '../components/ThreeIconGroup';
 
@@ -10,13 +11,16 @@ import ThreeIconGroup from '../components/ThreeIconGroup';
 =            Landing Component            =
 =========================================*/
 
+// navigation
+const handleRegister = () => history.replace('/register');
+
 const Landing = () => (
   <LandingMainContainer>
     <Header />
     <BackgroundGradient />
     <CenterStack>
       <CTAContainer>
-        <CallButton />
+        <CallButton onClick={handleRegister} />
       </CTAContainer>
       <DescriptionContainer>
         <DescriptionHeader />
