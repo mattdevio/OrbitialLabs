@@ -17,7 +17,6 @@ ___
 You are going to need MongoDB to get this application running. Here are some installation instructions for OSX.
 
 ```
-# Installation
 which mongod                // If this spits out a path, you already have mongo installed
 which brew                  // If this doesn't spit out a path, install [homebrew](https://brew.sh/)
 brew update                 // Update homebrew packages
