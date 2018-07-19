@@ -2,8 +2,9 @@ Public Square
 ========
 
 [![See our progress on trello](https://img.shields.io/badge/tasks-trello-orange.svg)](https://trello.com/b/wnHuGpf1/project-and-portfolio-6)
-![See our progress on trello](https://img.shields.io/badge/stack-MERN-green.svg)
-![See our progress on trello](https://img.shields.io/badge/class-WD6-blue.svg)
+![MERN Stack](https://img.shields.io/badge/stack-MERN-green.svg)
+![Fullsail Class - WD6](https://img.shields.io/badge/class-WD6-blue.svg)
+![MongoDB Version 3.2](https://img.shields.io/badge/mongo-v3.2-red.svg)
 
 Public Square is a messenger application built by Orbital Labs; a small group of students @ Full Sail University.
 
@@ -18,7 +19,7 @@ You are going to need MongoDB to get this application running. Here are some ins
 
 ```
 which mongod                // If this spits out a path, you already have mongo installed
-which brew                  // If this doesn't spit out a path, install [homebrew](https://brew.sh/)
+which brew                  // If this doesn't spit out a path, install homebrew -> https://brew.sh/
 brew update                 // Update homebrew packages
 brew install mongodb@3.2    // Install Mongodb
 ```
