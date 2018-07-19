@@ -13,6 +13,17 @@ ___
 
 **ALERT: This project requires Node.js v8.11.3 (alias lts/carbon) or higher!**<br>
 
+**Setup Mongodb**<br>
+You are going to need MongoDB to get this application running. Here are some installation instructions for OSX.
+
+```
+# Installation
+which mongod                // If this spits out a path, you already have mongo installed
+which brew                  // If this doesn't spit out a path, install [homebrew](https://brew.sh/)
+brew update                 // Update homebrew packages
+brew install mongodb@3.2    // Install Mongodb
+```
+
 Getting the project setup in your local enviornment is simple. Here are some commands to help you get started.
 
 ```
@@ -23,8 +34,14 @@ cd OrbitialLabs
 # Install all the required dependencies
 npm install
 
+# Start MongoDB
+npm run mongo:start
+
 # Start the application
 npm start
+
+# Stop Mongo
+npm run mongo:stop
 ```
 
 _Please Note: This project uses **ES-LINT** to help maintain coding standards. Please install your editor's **ES-LINT** plugin for inline linting feedback._
