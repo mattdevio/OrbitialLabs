@@ -1,25 +1,17 @@
 /*----------  Vendor Imports  ----------*/
 import React from 'react';
 import { render } from 'react-dom';
-import App from './app';
-import axios from 'axios';
-import io from 'socket.io-client';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCheckCircle, faLock, faSignal } from '@fortawesome/free-solid-svg-icons';
 
 /*----------  Custom Imports  ----------*/
+import Landing from './screens/Landing';
 
-// Test React
+/*----------  Setup  ----------*/
+library.add(faCheckCircle, faLock, faSignal);
+
+// Mount React on the HTML '#root' Node
 render(
-  <App />,
+  <Landing />,
   document.getElementById('root'),
 );
-
-// Test Axios
-axios.get('/api')
-  .then(response => console.log(response.data.message))
-  .catch(err => console.log(err));
-
-// Test Sockets
-const socket = io('http://localhost:3000' , {path: '/chat'});
-socket.on('ack', (data) => {
-  console.log(data);
-});
