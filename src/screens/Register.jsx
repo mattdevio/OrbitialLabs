@@ -1,6 +1,8 @@
 /*----------  Vendor Imports  ----------*/
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import swal from 'sweetalert';
 
 /*----------  Custom Imports  ----------*/
 import history from '../services/history';
@@ -40,9 +42,17 @@ class Register extends Component {
   }
 
   handleSubmit(event) {
-    console.log(event);
     event.preventDefault();
-    history.replace('/chat');
+    axios.post('/api/user/signup', {
+      ...this.state,
+    })
+      .then(() => {
+        swal('Welcome!', 'Thanks for joining!', 'success')
+          .then(() => history.replace('/chat'));
+      })
+      .catch(({response}) => {
+        swal('Oops', response.data.message, 'error');
+      });
   }
 
   render() {
