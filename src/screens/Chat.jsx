@@ -5,6 +5,9 @@ import styled from 'styled-components';
 /*----------  Custom Imports  ----------*/
 import Header from '../components/Header';
 
+/*----------   Giphy API      ----------*/
+import Giphy from '../components/Giphy';
+
 /*=========================================
 =            Chat Component            =
 =========================================*/
@@ -16,6 +19,7 @@ const Chat = () => (
     <CenterStack>
       <DescriptionContainer>
         <DescriptionHeader />
+          <Giphy />
       </DescriptionContainer>
     </CenterStack>
   </LandingMainContainer>
