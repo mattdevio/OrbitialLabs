@@ -19,7 +19,8 @@ const Chat = () => (
     <CenterStack>
       <DescriptionContainer>
         <DescriptionHeader />
-          <Giphy />
+          <Giphy search="dog" />
+          <Giphy search="bird" />
       </DescriptionContainer>
     </CenterStack>
   </LandingMainContainer>
