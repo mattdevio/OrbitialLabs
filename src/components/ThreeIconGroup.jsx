@@ -62,9 +62,9 @@ SplashIcon.propTypes = {
 /*=====  End of SplashIcon Component  ======*/
 
 const SplashIconContainer = styled.div`
-  display: flex,
-  flex-direction: column,
-  justify-content: space-evenly,
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 `;
 
 const SplashGradient = styled.div`
