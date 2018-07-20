@@ -9,13 +9,13 @@ import GphApiClient from 'giphy-js-sdk-core';
 var client = GphApiClient("PDMxypcw5ivDQhpO9jtsaeRddf9siLxA");
 
 //var searchImage = function(){
-    var image = "";
+    var imge = "";
     client.search('gifs', {"q": "cats", "limit": 1})
         .then((response) => {
             response.data.forEach((gifObject) => {
                 console.log(gifObject);
-                image = gifObject.images.downsized.gif_url;
-                console.log(image);
+                imge = gifObject.images.downsized.gif_url;
+                console.log(imge);
             })
         })
         .catch((err) => {
@@ -29,28 +29,6 @@ var client = GphApiClient("PDMxypcw5ivDQhpO9jtsaeRddf9siLxA");
  =========================================*/
 
 class Giphy extends Component {
-
-    constructor(props) {
-
-        super(props);
-        this.state = {
-            //client: GphApiClient("PDMxypcw5ivDQhpO9jtsaeRddf9siLxA"),
-            q: '',
-            s: '',
-            ids: '',
-            limit: '',
-            offset: '',
-            rating: '',
-            lang: '',
-            fmt: '',
-            sort: '',
-            tag: '',
-        };
-
-        //this.searchImage = this.searchImage().bind(this);
-    }
-
-
 
     /*searchImage(){
         var image = "";
@@ -69,8 +47,9 @@ class Giphy extends Component {
 
     render() {
         return (
-            <img src={ image } />
-            //<img src={ image } />
+            //<p>{imge}</p>
+            <img src={ imge } />
+
         );
     }
 }
