@@ -40,10 +40,12 @@ ApiRouter.post('/user/signup', (req, res) => {
   // Save the user
   newUser.save()
     .then((data) => {
-      req.auth.userId = data._id;
       res.json({
         token: auth.createJWToken({
-          sessionData: data,
+          sessionData: {
+            username: data.username,
+            email: data.email,
+          },
         }),
         success: true,
       });
@@ -89,7 +91,10 @@ ApiRouter.post('/user/login', (req, res) => {
       if (auth.verifyPassword(password, user.salt, user.password)) {
         res.json({
           token: auth.createJWToken({
-            sessionData: user,
+            sessionData: {
+              username: user.username,
+              email: user.email,
+            },
           }),
           success: true,
         });
@@ -106,6 +111,14 @@ ApiRouter.post('/user/login', (req, res) => {
     });
 
 }); // end post('/user/login')
+
+ApiRouter.get('/user/test', auth.verifyJWT_MW, (req, res) => {
+
+  console.log(req.headers.authorization);
+  console.log(req.user);
+  res.send('ok');
+
+}); // end get('/user/test')
 
 /*=====  End of ApiRouter  ======*/
 

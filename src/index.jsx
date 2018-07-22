@@ -43,6 +43,26 @@ render(
 axios.post('/api/user/login', {
   email: 'email@email.com',
   password: 'password',
-}).then(console.dir).catch(console.dir);
+}).then((res) => {
+
+  const { success, token, error } = res.data;
+  if (success) {
+
+    console.log(token);
+    axios.get('/api/user/test', {
+      headers: {
+        authorization: token,
+      },
+    }).then((res) => {
+
+      console.log(res.data);
+
+    }).catch(console.dir);
+
+  } else {
+    console.log(error);
+  }
+
+}).catch(console.dir);
 
 
