@@ -3,13 +3,8 @@ const { Router } = require('express');
 
 /*----------  Custom Imports  ----------*/
 const UserModel = require('../schema/user');
-const { 
-  log,
-  hash,
-  verify,
-  isValid,
-  parseMongoError,
-} = require('../utility');
+const auth = require('../lib/auth');
+const util = require('../lib/utility').getInstance();
 
 /*----------  Setup  ----------*/
 const ApiRouter = Router();
@@ -20,20 +15,21 @@ const ApiRouter = Router();
 
 ApiRouter.post('/user/signup', (req, res) => {
 
-  // Validate the post PARAMS
+  // Get parameters
   const { username, email, password } = req.body;
-  if (!username || !email || !password) return res.status(400).send({
-    message: 'Missing parameters in request.',
-    requiredFields: ['username', 'email', 'password'],
+
+  // Validate
+  if (!username || !email || !password) return res.json({
+    error: 'Missing parameters',
+    success: false,
+  });
+  if (util.emailInvalid(email)) return res.json({
+    error: 'Invalid email',
+    success: false,
   });
 
-  // Validate the email
-  if (!isValid.email(email)) {
-    return res.status(422).send({ message: 'Bad Email' });
-  }
-
-  // Prep a new user
-  const hashObj = hash(password);
+  // Prep user info
+  const hashObj = auth.hashPassword(password);
   const newUser = new UserModel({
     username,
     email,
@@ -41,81 +37,72 @@ ApiRouter.post('/user/signup', (req, res) => {
     password: hashObj.hashedPassword,
   });
 
-  // Save the new user in the database
+  // Save the user
   newUser.save()
     .then((data) => {
       req.auth.userId = data._id;
-      res.send({
-        username: data.username,
-        email: data.email,
-        message: 'OK',
+      res.json({
+        token: auth.createJWToken({
+          sessionData: data,
+        }),
+        success: true,
       });
     })
     .catch((err) => {
-
-      // parse the error message
-      err = parseMongoError(err);
-
-      // No duplicate keys allowed
       if (err.code === 11000) {
-        const value = (err.key === 'username') ? username : email;
-        return res.status(422).send({
-          message: `The ${err.key} '${value}' is already taken`,
-          identifier: err.key,
-          value,
+        const key = util.getMongoViolater(err);
+        const value = (key === 'username') ? username : email;
+        return res.json({
+          error: `The ${key} '${value}' is already taken`,
+          success: false,
         });
       }
-
-      // Log and close the response
-      log.error(err.message);
-      res.status(500).send({
-        message: 'Server Error, Oops',
-      });
+      util.error(err.message);
+      return res.status(500).end();
     });
 
 }); // end post('/user/signup')
 
 ApiRouter.post('/user/login', (req, res) => {
 
-  console.log(req.auth);
-
-  // Validate the post params
+  // Get parameters
   const { email, password } = req.body;
-  if (!email || !password) return res.status(400).send({
-    message: 'Missing parameters in request.',
-    requiredFields: ['email', 'password'],
-  });
 
-  // Validate email
-  if (!isValid.email(email)) {
-    return res.status(422).send({ message: 'Bad Email'});
-  }
+  // Validate
+  if (!email || !password) return res.json({
+    error: 'Missing parameters',
+    success: false,
+  });
+  if (util.emailInvalid(email)) return res.json({ 
+    error: 'Invalid email',
+    success: false,
+  });
 
   // Find the user by email
   UserModel.find({ email }).exec()
     .then((data) => {
-
-      if(data.length === 0) return res.send({
-        message: 'Email is incorrect',
+      if(data.length === 0) return res.json({
+        error: 'No user with that email',
+        success: false,
       });
-
       const user = data[0];
-      const passed = verify(password, user.salt, user.password);
-
-      if (passed) {
-        res.send({
-          message: 'OK',
-          username: user.username,
+      if (auth.verifyPassword(password, user.salt, user.password)) {
+        res.json({
+          token: auth.createJWToken({
+            sessionData: user,
+          }),
+          success: true,
         });
       } else {
-        res.status(403).send({
-          message: 'Bad Password',
+        res.json({
+          error: 'Invalid password',
+          success: false,
         });
       }
     })
     .catch((err) => {
-      console.log(err);
-      res.status(500).send();
+      util.error(err.message);
+      return res.status(500).end();
     });
 
 }); // end post('/user/login')

@@ -1,14 +1,14 @@
 /*----------  Vendor Imports  ----------*/
 
 /*----------  Custom Imports  ----------*/
-const { log } = require('../utility');
+const util = require('../lib/utility').getInstance();
 
 
 function BindEventMiddleware(io) {
 
   io.on('connection', function(socket) {
 
-    log.info(`New socket ${socket.id} connected!`);
+    util.log(`New socket ${socket.id} connected!`);
     socket.emit('ack', `Your socket id is ${socket.id}`);
 
   });
