@@ -3,7 +3,13 @@ const { Router } = require('express');
 
 /*----------  Custom Imports  ----------*/
 const UserModel = require('../schema/user');
-const { log, hash, verify } = require('../utility');
+const { 
+  log,
+  hash,
+  verify,
+  isValid,
+  parseMongoError,
+} = require('../utility');
 
 /*----------  Setup  ----------*/
 const ApiRouter = Router();
@@ -12,27 +18,19 @@ const ApiRouter = Router();
 =            ApiRouter            =
 ==================================*/
 
-ApiRouter.route('/user')
-  .get((req, res, next) => {
-    res.send('get');
-  })
-  .post((req, res, next) => {
-    res.send('post');
-  })
-  .put((req, res, next) => {
-    res.send('put');
-  })
-  .delete((req, res, next) => {
-    res.send('delete');
-  });
-
 ApiRouter.post('/user/signup', (req, res) => {
 
   // Validate the post PARAMS
   const { username, email, password } = req.body;
-  if (!username || !email || !password) return res.status(422).send({
-    message: 'Missing Paramaters In Request',
+  if (!username || !email || !password) return res.status(400).send({
+    message: 'Missing parameters in request.',
+    requiredFields: ['username', 'email', 'password'],
   });
+
+  // Validate the email
+  if (!isValid.email(email)) {
+    return res.status(422).send({ message: 'Bad Email' });
+  }
 
   // Prep a new user
   const hashObj = hash(password);
@@ -50,21 +48,20 @@ ApiRouter.post('/user/signup', (req, res) => {
       res.send({
         username: data.username,
         email: data.email,
-        message: 'Login OK',
+        message: 'OK',
       });
     })
     .catch((err) => {
 
-      // eslint-disable-next-line
-      const regex = /index\:\ (?:.*\.)?\$?(?:([_a-z0-9]*)(?:_\d*)|([_a-z0-9]*))\s*dup key/i;
+      // parse the error message
+      err = parseMongoError(err);
 
-      // Catch duplicate creation
+      // No duplicate keys allowed
       if (err.code === 11000) {
-        const key = err.message.match(regex)[1];
-        const value = (key === 'username') ? username : email;
-        return res.status(409).send({
-          message: `The ${key} '${value}' already exists`,
-          key,
+        const value = (err.key === 'username') ? username : email;
+        return res.status(422).send({
+          message: `The ${err.key} '${value}' is already taken`,
+          identifier: err.key,
           value,
         });
       }
@@ -76,7 +73,52 @@ ApiRouter.post('/user/signup', (req, res) => {
       });
     });
 
-});
+}); // end post('/user/signup')
+
+ApiRouter.post('/user/login', (req, res) => {
+
+  console.log(req.auth);
+
+  // Validate the post params
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).send({
+    message: 'Missing parameters in request.',
+    requiredFields: ['email', 'password'],
+  });
+
+  // Validate email
+  if (!isValid.email(email)) {
+    return res.status(422).send({ message: 'Bad Email'});
+  }
+
+  // Find the user by email
+  UserModel.find({ email }).exec()
+    .then((data) => {
+
+      if(data.length === 0) return res.send({
+        message: 'Email is incorrect',
+      });
+
+      const user = data[0];
+      const passed = verify(password, user.salt, user.password);
+
+      if (passed) {
+        res.send({
+          message: 'OK',
+          username: user.username,
+        });
+      } else {
+        res.status(403).send({
+          message: 'Bad Password',
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send();
+    });
+
+}); // end post('/user/login')
 
 /*=====  End of ApiRouter  ======*/
 

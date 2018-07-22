@@ -57,3 +57,35 @@ function verify(password, salt, hashedPassword) {
 }
 
 module.exports.verify = verify;
+
+/**
+ * Validate a user's email
+ * @param  {string}  email [The email]
+ * @return {boolean}       [True if the email is in correct format]
+ */
+function validateEmail(email) {
+  return (email.indexOf('@') > 0);
+}
+
+module.exports.isValid = {
+  email: validateEmail,
+};
+
+/**
+ * Get the bad key value pair from the mongo error
+ * @param  {object} error       [The mongo db error]
+ * @return {object}             [The kvp object]
+ */
+function parseMongoError(error) {
+  // eslint-disable-next-line no-useless-escape
+  const regex = /index\:\ (?:.*\.)?\$?(?:([_a-z0-9]*)(?:_\d*)|([_a-z0-9]*))\s*dup key/i;
+  if (error.code === 11000) {
+    error = {
+      ...error,
+      key: error.message.match(regex)[1],
+    };
+  }
+  return error;
+}
+module.exports.parseMongoError = parseMongoError;
+
