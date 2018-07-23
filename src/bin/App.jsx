@@ -4,6 +4,7 @@ import { Router, Switch, Route, Redirect } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCheckCircle, faLock, faSignal } from '@fortawesome/free-solid-svg-icons';
+import styled from 'styled-components';
 
 /*----------  Custom Imports  ----------*/
 import { 
@@ -12,6 +13,9 @@ import {
   Authenticate,
   Register,
 } from 'screens';
+import {
+  Header,
+} from 'components';
 
 /*----------  Setup  ----------*/
 library.add(faCheckCircle, faLock, faSignal);
@@ -30,13 +34,17 @@ class App extends Component {
   render() {
     return (
       <Router history={ this.history }>
-        <Switch>
-          <Route exact path='/' component={ Landing } />
-          <Route path='/chat' component={Chat} />
-          <Route path='/auth' component={Authenticate} />
-          <Route path='/register' component={Register} />
-          <Route render={() => <Redirect to='/' />} />
-        </Switch>
+        <AppContainer>
+          <BackgroundGradient />
+          <Header />
+          <Switch>
+            <Route exact path='/' component={ Landing } />
+            <Route path='/chat' component={Chat} />
+            <Route path='/auth' component={Authenticate} />
+            <Route path='/register' component={Register} />
+            <Route render={() => <Redirect to='/' />} />
+          </Switch>
+        </AppContainer>
       </Router>
     );
   }
@@ -46,3 +54,18 @@ class App extends Component {
 export default App;
 
 /*=====  End of App Component  ======*/
+
+const AppContainer = styled.main`
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  width: 100vw;
+`;
+
+const BackgroundGradient = styled.div`
+  background: linear-gradient(90deg, rgba(85,91,186,1) 0%, rgba(16,218,255,1) 100%);
+  clip-path: polygon(0 0, 6000px 0, 1600px 75%, 0 100%);
+  height: 90%;
+  position: absolute;
+  width: 100%;
+`;

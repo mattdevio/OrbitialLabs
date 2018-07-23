@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 /*----------  Custom Imports  ----------*/
-import Header from '../components/Header';
 
 /*=========================================
 =        Authentication Component         =
@@ -66,20 +65,6 @@ class Authenticate extends Component {
 export default Authenticate;
 
 /*=====  End of Landing Component  ======*/
-const LandingMainContainer = styled.main`
-  display: flex;
-  height: 100vh;
-  justify-content: center;
-  width: 100vw;
-`;
-
-const BackgroundGradient = styled.div`
-  background: linear-gradient(90deg, rgba(85,91,186,1) 0%, rgba(16,218,255,1) 100%);
-  clip-path: polygon(0 0, 6000px 0, 1600px 75%, 0 100%);
-  height: 90%;
-  position: absolute;
-  width: 100%;
-`;
 
 const CenterStack = styled.div`
   align-items: center;
