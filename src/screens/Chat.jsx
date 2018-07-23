@@ -4,6 +4,8 @@ import styled from 'styled-components';
 
 /*----------  Custom Imports  ----------*/
 import Header from '../components/Header';
+import NewMessage from '../components/NewMessage';
+import MessageList from '../components/MessageList';
 
 /*=========================================
 =            Chat Component            =
@@ -15,7 +17,8 @@ const Chat = () => (
     <BackgroundGradient />
     <CenterStack>
       <DescriptionContainer>
-        <DescriptionHeader />
+        <NewMessage />
+        <MessageList />
       </DescriptionContainer>
     </CenterStack>
   </LandingMainContainer>
@@ -56,15 +59,6 @@ const DescriptionContainer = styled.article`
   display: flex;
   flex-direction: column;
   height: 80%;
-  justify-content: space-evenly;
+  justify-content: space-between;
   width: 670px;
-`;
-
-const DescriptionHeader = styled.h3.attrs({
-  children: 'No new posts.',
-})`
-  color: #585858;
-  font-weight: 300;
-  letterSpacing: 1px;
-  text-align: center;
 `;
