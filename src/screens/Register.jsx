@@ -5,7 +5,6 @@ import axios from 'axios';
 import swal from 'sweetalert';
 
 /*----------  Custom Imports  ----------*/
-import history from '../services/history';
 import Header from '../components/Header';
 
 /*=========================================
@@ -48,7 +47,9 @@ class Register extends Component {
     })
       .then(() => {
         swal('Welcome!', 'Thanks for joining!', 'success')
-          .then(() => history.replace('/chat'));
+          .then(() => {
+            console.log('do something');
+          });
       })
       .catch(({response}) => {
         swal('Oops', response.data.message, 'error');

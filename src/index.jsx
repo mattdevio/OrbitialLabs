@@ -1,31 +1,16 @@
 /*----------  Vendor Imports  ----------*/
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, Route, Switch } from 'react-router-dom';
-import { Redirect } from 'react-router';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCheckCircle, faLock, faSignal } from '@fortawesome/free-solid-svg-icons';
+import { Provider } from 'react-redux';
 
 /*----------  Custom Imports  ----------*/
-import history from './services/history';
-import Landing from './screens/Landing';
-import Chat from './screens/Chat';
-import Authenticate from './screens/Authenticate';
-import Register from './screens/Register';
-
-/*----------  Setup  ----------*/
-library.add(faCheckCircle, faLock, faSignal);
+import App from 'bin/App';
+import store from 'store';
 
 // Mount React on the HTML '#root' Node
 render(
-  <Router history={history}>
-    <Switch>
-      <Route exact path='/' component={Landing} />
-      <Route path='/chat' component={Chat} />
-      <Route path='/auth' component={Authenticate} />
-      <Route path='/register' component={Register} />
-      <Route render={() => <Redirect to='/' />} />
-    </Switch>
-  </Router>,
+  <Provider store={ store }>
+    <App />
+  </Provider>,
   document.getElementById('root'),
 );

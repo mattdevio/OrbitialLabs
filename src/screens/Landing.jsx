@@ -1,38 +1,51 @@
 /*----------  Vendor Imports  ----------*/
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
+import { withRouter } from 'react-router-dom';
 
 /*----------  Custom Imports  ----------*/
-import history from '../services/history';
 import Header from '../components/Header';
 import ThreeIconGroup from '../components/ThreeIconGroup';
+
 
 /*=========================================
 =            Landing Component            =
 =========================================*/
 
-// navigation
-const handleRegister = () => history.replace('/register');
+class Landing extends Component {
 
-const Landing = () => (
-  <LandingMainContainer>
-    <Header />
-    <BackgroundGradient />
-    <CenterStack>
-      <CTAContainer>
-        <CallButton onClick={handleRegister} />
-      </CTAContainer>
-      <DescriptionContainer>
-        <DescriptionHeader />
-        <ThreeIconGroup />
-      </DescriptionContainer>
-    </CenterStack>
-  </LandingMainContainer>
-);
+  constructor(props) {
+    super(props);
+    this.handleRegister = this.handleRegister.bind(this);
+  }
 
-export default Landing;
+  handleRegister(event) {
+    console.log(event.target);
+  }
+
+  render() {
+    return (
+      <LandingMainContainer>
+        <Header />
+        <BackgroundGradient />
+        <CenterStack>
+          <CTAContainer>
+            <CallButton onClick={this.handleRegister} />
+          </CTAContainer>
+          <DescriptionContainer>
+            <DescriptionHeader />
+            <ThreeIconGroup />
+          </DescriptionContainer>
+        </CenterStack>
+      </LandingMainContainer>
+    );
+  }
+}
+
+export default withRouter(Landing);
 
 /*=====  End of Landing Component  ======*/
+
 
 const LandingMainContainer = styled.main`
   display: flex;

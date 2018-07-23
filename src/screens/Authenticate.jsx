@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 /*----------  Custom Imports  ----------*/
-import history from '../services/history';
 import Header from '../components/Header';
 
 /*=========================================
@@ -36,7 +35,6 @@ class Authenticate extends Component {
   handleSubmit(event) {
     console.log(event);
     event.preventDefault();
-    history.replace('/chat');
   }
 
   render() {
