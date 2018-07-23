@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import { Router, Route, Switch } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCheckCircle, faLock, faSignal } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faLock, faSignal, faMicrophone, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import io from 'socket.io-client';
 
@@ -16,7 +16,7 @@ import Authenticate from './screens/Authenticate';
 import Register from './screens/Register';
 
 /*----------  Setup  ----------*/
-library.add(faCheckCircle, faLock, faSignal);
+library.add(faCheckCircle, faLock, faSignal, faMicrophone, faEllipsisH);
 
 // Mount React on the HTML '#root' Node
 render(
