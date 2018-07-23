@@ -57,30 +57,26 @@ class Register extends Component {
 
   render() {
     return (
-      <LandingMainContainer>
-        <Header />
-        <BackgroundGradient />
-        <CenterStack>
-          <DescriptionContainer>
-            <DescriptionHeader />
-            <AuthForm onSubmit={this.handleSubmit}>
-              <AuthLabel>
-                username
-                <AuthInput type='text' value={this.state.username} onChange={this.handleUsername} />
-              </AuthLabel>
-              <AuthLabel>
-                email
-                <AuthInput type='text' value={this.state.email} onChange={this.handleEmail} />
-              </AuthLabel>
-              <AuthLabel>
-                password
-                <AuthInput type='text' value={this.state.password} onChange={this.handlePassword} />
-              </AuthLabel>
-              <AuthInputSubmit type='submit' value='REGISTER' />
-            </AuthForm>
-          </DescriptionContainer>
-        </CenterStack>
-      </LandingMainContainer>
+      <CenterStack>
+        <DescriptionContainer>
+          <DescriptionHeader />
+          <AuthForm onSubmit={this.handleSubmit}>
+            <AuthLabel>
+              username
+              <AuthInput type='text' value={this.state.username} onChange={this.handleUsername} />
+            </AuthLabel>
+            <AuthLabel>
+              email
+              <AuthInput type='text' value={this.state.email} onChange={this.handleEmail} />
+            </AuthLabel>
+            <AuthLabel>
+              password
+              <AuthInput type='text' value={this.state.password} onChange={this.handlePassword} />
+            </AuthLabel>
+            <AuthInputSubmit type='submit' value='REGISTER' />
+          </AuthForm>
+        </DescriptionContainer>
+      </CenterStack>
     );
   }
 }

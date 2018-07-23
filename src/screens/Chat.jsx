@@ -11,16 +11,12 @@ import MessageList from '../components/MessageList';
 =========================================*/
 
 const Chat = () => (
-  <LandingMainContainer>
-    <Header />
-    <BackgroundGradient />
-    <CenterStack>
-      <DescriptionContainer>
-        <NewMessage />
-        <MessageList />
-      </DescriptionContainer>
-    </CenterStack>
-  </LandingMainContainer>
+  <CenterStack>
+    <DescriptionContainer>
+      <NewMessage />
+      <MessageList />
+    </DescriptionContainer>
+  </CenterStack>
 );
 
 export default Chat;
