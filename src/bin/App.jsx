@@ -56,16 +56,15 @@ export default App;
 /*=====  End of App Component  ======*/
 
 const AppContainer = styled.main`
-  display: flex;
-  height: 100vh;
-  justify-content: center;
   width: 100vw;
+  height: 100vh;
+  position: relative;
 `;
 
 const BackgroundGradient = styled.div`
   background: linear-gradient(90deg, rgba(85,91,186,1) 0%, rgba(16,218,255,1) 100%);
   clip-path: polygon(0 0, 6000px 0, 1600px 75%, 0 100%);
+  width: 100%;
   height: 90%;
   position: absolute;
-  width: 100%;
 `;
