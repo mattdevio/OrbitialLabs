@@ -1,15 +1,29 @@
 /*----------  Vendor Imports  ----------*/
 
 /*----------  Custom Imports  ----------*/
-const { log } = require('../utility');
+const util = require('../lib/utility').getInstance();
+const auth = require('../lib/auth');
 
 
 function BindEventMiddleware(io) {
 
-  io.on('connection', function(socket) {
+  io.set('authorization', ({ headers }, callback) => {
 
-    log.info(`New socket ${socket.id} connected!`);
-    socket.emit('ack', `Your socket id is ${socket.id}`);
+    auth.verifyJWToken(headers.authorization)
+      .then((decodedToken) => {
+        util.log(JSON.stringify(decodedToken, null, 2));
+        callback(null, true);
+      })
+      .catch((err) => {
+        util.log(err);
+        callback('auth failed', false);
+      });
+
+  });
+
+  io.sockets.on('connection', function(socket) {
+
+    util.log(`socket connected : ${socket.id}`);
 
   });
 

@@ -3,7 +3,8 @@ const { Router } = require('express');
 
 /*----------  Custom Imports  ----------*/
 const UserModel = require('../schema/user');
-const { log, hash, verify } = require('../utility');
+const auth = require('../lib/auth');
+const util = require('../lib/utility').getInstance();
 
 /*----------  Setup  ----------*/
 const ApiRouter = Router();
@@ -12,30 +13,23 @@ const ApiRouter = Router();
 =            ApiRouter            =
 ==================================*/
 
-ApiRouter.route('/user')
-  .get((req, res, next) => {
-    res.send('get');
-  })
-  .post((req, res, next) => {
-    res.send('post');
-  })
-  .put((req, res, next) => {
-    res.send('put');
-  })
-  .delete((req, res, next) => {
-    res.send('delete');
-  });
-
 ApiRouter.post('/user/signup', (req, res) => {
 
-  // Validate the post PARAMS
+  // Get parameters
   const { username, email, password } = req.body;
-  if (!username || !email || !password) return res.status(422).send({
-    message: 'Missing Paramaters In Request',
+
+  // Validate
+  if (!username || !email || !password) return res.json({
+    error: 'Missing parameters',
+    success: false,
+  });
+  if (util.emailInvalid(email)) return res.json({
+    error: 'Invalid email',
+    success: false,
   });
 
-  // Prep a new user
-  const hashObj = hash(password);
+  // Prep user info
+  const hashObj = auth.hashPassword(password);
   const newUser = new UserModel({
     username,
     email,
@@ -43,40 +37,88 @@ ApiRouter.post('/user/signup', (req, res) => {
     password: hashObj.hashedPassword,
   });
 
-  // Save the new user in the database
+  // Save the user
   newUser.save()
     .then((data) => {
-      req.auth.userId = data._id;
-      res.send({
-        username: data.username,
-        email: data.email,
-        message: 'Login OK',
+      res.json({
+        token: auth.createJWToken({
+          sessionData: {
+            username: data.username,
+            email: data.email,
+          },
+        }),
+        success: true,
       });
     })
     .catch((err) => {
-
-      // eslint-disable-next-line
-      const regex = /index\:\ (?:.*\.)?\$?(?:([_a-z0-9]*)(?:_\d*)|([_a-z0-9]*))\s*dup key/i;
-
-      // Catch duplicate creation
       if (err.code === 11000) {
-        const key = err.message.match(regex)[1];
+        const key = util.getMongoViolater(err);
         const value = (key === 'username') ? username : email;
-        return res.status(409).send({
-          message: `The ${key} '${value}' already exists`,
-          key,
-          value,
+        return res.json({
+          error: `The ${key} '${value}' is already taken`,
+          success: false,
         });
       }
-
-      // Log and close the response
-      log.error(err.message);
-      res.status(500).send({
-        message: 'Server Error, Oops',
-      });
+      util.error(err.message);
+      return res.status(500).end();
     });
 
-});
+}); // end post('/user/signup')
+
+ApiRouter.post('/user/login', (req, res) => {
+
+  // Get parameters
+  const { email, password } = req.body;
+
+  // Validate
+  if (!email || !password) return res.json({
+    error: 'Missing parameters',
+    success: false,
+  });
+  if (util.emailInvalid(email)) return res.json({ 
+    error: 'Invalid email',
+    success: false,
+  });
+
+  // Find the user by email
+  UserModel.find({ email }).exec()
+    .then((data) => {
+      if(data.length === 0) return res.json({
+        error: 'No user with that email',
+        success: false,
+      });
+      const user = data[0];
+      if (auth.verifyPassword(password, user.salt, user.password)) {
+        res.json({
+          token: auth.createJWToken({
+            sessionData: {
+              username: user.username,
+              email: user.email,
+            },
+          }),
+          success: true,
+        });
+      } else {
+        res.json({
+          error: 'Invalid password',
+          success: false,
+        });
+      }
+    })
+    .catch((err) => {
+      util.error(err.message);
+      return res.status(500).end();
+    });
+
+}); // end post('/user/login')
+
+ApiRouter.get('/user/test', auth.verifyJWT_MW, (req, res) => {
+
+  console.log(req.headers.authorization);
+  console.log(req.user);
+  res.send('ok');
+
+}); // end get('/user/test')
 
 /*=====  End of ApiRouter  ======*/
 

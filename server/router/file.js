@@ -1,6 +1,9 @@
 /*----------  Vendor Imports  ----------*/
 const { Router } = require('express');
 
+/*----------  Custom Imports  ----------*/
+const util = require('../lib/utility').getInstance();
+
 /*----------  Setup  ----------*/
 const FileRouter = Router();
 
@@ -10,9 +13,14 @@ const FileRouter = Router();
 
 FileRouter.get('*', (req, res) => {
 
-  res.render('index', {
-    bundles: ['app.bundle.js', 'polyfill.bundle.js'],
-  });
+  try {
+    res.render('index', {
+      bundles: ['app.bundle.js', 'polyfill.bundle.js'],
+    });
+  } catch (e) {
+    util.error(e.message);
+    res.status(500).end();
+  }
 
 });
 

@@ -10,10 +10,9 @@ const merge = require('webpack-merge');
 const socketIO = require('socket.io');
 const http = require('http');
 const mongoose = require('mongoose');
-const sessions = require('client-sessions');
 
 /*----------  Custom Imports  ----------*/
-const { log } = require('./utility');
+const util = require('./lib/utility').getInstance();
 const FileRouter = require('./router/file');
 const ApiRouter = require('./router/api');
 const BindEventMiddleware = require('./events');
@@ -48,19 +47,12 @@ app.set('view engine', 'pug');
 app.set('views', path.resolve(__dirname, './views'));
 app.use('/assets', express.static(path.resolve(__dirname, './assets')));
 
-// Add Session data
-app.use(sessions({
-  cookieName: 'auth',
-  secret: 'f92fixiqm32idmf/fjdw',
-  duration: 60 * 60 * 1000,
-}));
-
 // Open mongoose DB connection
 mongoose.connect('mongodb://localhost:27017/PublicSquare', { useNewUrlParser: true });
 
 // Bind Listening Port
 server.listen(config.port, () => {
-  log.info(`Server is listening on http://localhost:${config.port}`);
+  util.log(`Server is listening on http://localhost:${config.port}`);
 });
 
 // Serve webpack bundles
