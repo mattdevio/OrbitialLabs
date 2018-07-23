@@ -6,6 +6,7 @@ import { Redirect } from 'react-router';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCheckCircle, faLock, faSignal } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import io from 'socket.io-client';
 
 /*----------  Custom Imports  ----------*/
 import history from './services/history';
@@ -49,20 +50,29 @@ axios.post('/api/user/login', {
   if (success) {
 
     console.log(token);
-    axios.get('/api/user/test', {
-      headers: {
-        authorization: token,
+
+    const socket = io({
+      path: '/chat',
+      extraHeaders: {
+        authorizations: token,
       },
-    }).then((res) => {
+    });
 
-      console.log(res.data);
+    socket.on('error', (data) => {
+      console.log(data);
+    });
 
-    }).catch(console.dir);
+    // axios.get('/api/user/test', {
+    //   headers: {
+    //     authorization: token,
+    //   },
+    // }).then((res) => {
+    //   console.log(res.data);
+    // }).catch(console.dir);
 
   } else {
     console.log(error);
   }
 
 }).catch(console.dir);
-
 
