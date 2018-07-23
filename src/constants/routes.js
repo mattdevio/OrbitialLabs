@@ -1,4 +1,6 @@
 /*----------  Define All Routes  ----------*/
 export const LANDING = '/';
-export const SIGN_UP = '/signup';
-export const SIGN_IN = '/signin';
+export const REGISTER = '/register';
+export const AUTH = '/auth';
+export const CHAT = '/chat';
+export const LOGOUT = '/logout';

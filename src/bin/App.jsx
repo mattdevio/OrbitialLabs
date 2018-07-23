@@ -7,6 +7,7 @@ import { faCheckCircle, faLock, faSignal } from '@fortawesome/free-solid-svg-ico
 import styled from 'styled-components';
 
 /*----------  Custom Imports  ----------*/
+import * as routes from 'constants/routes';
 import { 
   Landing,
   Chat,
@@ -38,11 +39,11 @@ class App extends Component {
           <BackgroundGradient />
           <Header />
           <Switch>
-            <Route exact path='/' component={ Landing } />
-            <Route path='/chat' component={Chat} />
-            <Route path='/auth' component={Authenticate} />
-            <Route path='/register' component={Register} />
-            <Route render={() => <Redirect to='/' />} />
+            <Route exact path={ routes.LANDING } component={ Landing } />
+            <Route path={ routes.CHAT } component={Chat} />
+            <Route path={ routes.AUTH } component={Authenticate} />
+            <Route path={ routes.REGISTER } component={Register} />
+            <Route render={() => <Redirect to={ routes.LANDING } />} />
           </Switch>
         </AppContainer>
       </Router>

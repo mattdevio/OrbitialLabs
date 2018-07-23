@@ -15,12 +15,45 @@ class Header extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      routes: this.getRoutes(props.location.pathname),
+    };
+    props.history.listen(this.onRouteChange.bind(this));
     this.handleBrandClick = this.handleBrandClick.bind(this);
   }
 
   handleBrandClick() {
     const { history } = this.props;
     history.push(routes.LANDING);
+  }
+
+  onRouteChange(location, action) {
+    const oldPath = this.props.location.pathname;
+    const newPath = location.pathname;
+    if (action !== 'PUSH' || oldPath !== newPath) {
+      this.setState({
+        routes: this.getRoutes(newPath),
+      });
+    }
+  }
+
+  getRoutes(path) {
+    const newRoutes = {};
+    switch (path) {
+      case routes.LANDING:
+        newRoutes[routes.AUTH] = 'login';
+        break;
+      case routes.AUTH:
+        newRoutes[routes.REGISTER] = 'sign up';
+        break;
+      case routes.REGISTER:
+        newRoutes[routes.AUTH] = 'login';
+        break;
+      case routes.CHAT:
+        newRoutes[routes.LOGOUT] = 'sign out';
+        break;
+    }
+    return newRoutes;
   }
 
   render() {
@@ -33,7 +66,11 @@ class Header extends Component {
           </Name>
         </BrandContainer>
         <NavigationContainer>
-          <NavLink to='/chat'>Go</NavLink>
+          {Object.keys(this.state.routes).map(key => (
+            <NavLink key={ key } to={ key }>
+              { this.state.routes[key] }
+            </NavLink>
+          ))}
         </NavigationContainer>
       </HeaderContainer>
     );
@@ -42,6 +79,7 @@ class Header extends Component {
 
 Header.propTypes = {
   history: PropTypes.object,
+  location: PropTypes.object,
 };
 
 export default withRouter(Header);
@@ -86,6 +124,12 @@ const Name = styled.h1`
 
 const NavigationContainer = styled.nav`
   display: inline-block;
+  > * {
+    margin-right: 5px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
 `;
 
 const NavLink = styled(Link)`
@@ -97,15 +141,19 @@ const NavLink = styled(Link)`
   font-size: 18px;
   font-weight: 800;
   letter-spacing: 2px;
-  padding: 10px 30px;
+  padding: 10px 0;
+  width: 150px;
+  text-align: center;
   display: inline-block;
   position: relative;
   transition: 0.3s all;
-  &:hover,
-  &:focus {
+  &:hover {
     background: #FF6077;
     color: #FFFFFF;
     border-color: #FF6077;
+    outline: none;
+  }
+  &:focus {
     outline: none;
   }
 `;
