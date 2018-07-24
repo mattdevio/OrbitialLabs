@@ -117,4 +117,5 @@ const MessageActions = styled.section`
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   color: #b4b4b4;
   font-size: 26px;
+  cursor: pointer;
 `;

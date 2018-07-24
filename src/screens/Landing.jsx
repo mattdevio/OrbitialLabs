@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 
 /*----------  Custom Imports  ----------*/
-import ThreeIconGroup from '../components/ThreeIconGroup';
+import { ThreeIconGroup } from 'components';
 
 
 /*=========================================
