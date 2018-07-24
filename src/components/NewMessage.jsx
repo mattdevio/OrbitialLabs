@@ -93,7 +93,11 @@ class NewMessage extends Component {
     return (
       <NewMessageContainer>
         <SpeechToTextContainer>
-          <StyledFontAwesomeIcon icon={isRecording ? 'circle-notch' : 'microphone'} recording={isRecording.toString()} onClick={this.handleMicrophone} />
+          <StyledFontAwesomeIcon 
+            icon={ isRecording ? 'circle-notch' : 'microphone' }
+            recording={ isRecording.toString() }
+            onClick={ this.handleMicrophone }
+          />
         </SpeechToTextContainer>
         <NewMessageForm onSubmit={this.handleSubmit}>
           <MessageInput type='text' placeholder='Type something...' value={message} onChange={this.handleMessage} />
