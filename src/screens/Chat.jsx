@@ -3,8 +3,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 /*----------  Custom Imports  ----------*/
-import NewMessage from '../components/NewMessage';
-import MessageList from '../components/MessageList';
+import {
+  NewMessage,
+  MessageList,
+} from 'components';
 
 /*=========================================
 =            Chat Component            =
