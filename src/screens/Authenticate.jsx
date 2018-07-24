@@ -11,46 +11,54 @@ import styled from 'styled-components';
 class Authenticate extends Component {
 
   constructor(props) {
-
     super(props);
     this.state = {
       email: '',
       password: '',
     };
-
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleEmail = this.handleEmail.bind(this);
-    this.handlePassword = this.handlePassword.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleEmail(event) {
-    this.setState({ email: event.target.value });
-  }
-
-  handlePassword(event) {
-    this.setState({ password: event.target.value });
+  handleChange(event) {
+    const mutation = {};
+    mutation[event.target.id] = event.target.value;
+    this.setState(mutation);
   }
 
   handleSubmit(event) {
-    console.log(event);
     event.preventDefault();
   }
 
   render() {
+    const {
+      email,
+      password,
+    } = this.state;
     return (
       <CenterStack>
         <DescriptionContainer>
           <DescriptionHeader />
-          <AuthForm onSubmit={this.handleSubmit}>
-            <AuthLabel>
+          <AuthForm onSubmit={ this.handleSubmit }>
+            <AuthLabel htmlFor='email'>
               email
-              <AuthInput type='text' value={this.state.email} onChange={this.handleEmail} />
+              <AuthInput
+                id='email'
+                type='text'
+                value={ email }
+                onChange={ this.handleChange }
+              />
             </AuthLabel>
-            <AuthLabel>
+            <AuthLabel htmlFor='password'>
               password
-              <AuthInput type='text' value={this.state.password} onChange={this.handlePassword} />
+              <AuthInput
+                id='password'
+                type='text'
+                value={ password }
+                onChange={ this.handleChange }
+              />
             </AuthLabel>
-            <AuthInputSubmit type='submit' value='SIGN IN' />
+            <AuthInputSubmit />
           </AuthForm>
         </DescriptionContainer>
       </CenterStack>
@@ -122,7 +130,10 @@ const AuthInput = styled.input`
   }
 `;
 
-const AuthInputSubmit = styled.input`
+const AuthInputSubmit = styled.input.attrs({
+  input: 'submit',
+  value: 'SIGN IN',
+})`
   background: #FF6077;
   border: 0;
   border-radius: 5px;
