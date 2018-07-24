@@ -4,6 +4,11 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
+// --- Speech Recognition ---
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+recognition.continuous = true;
+
 /*=========================================
 =           New Message Component         =
 =========================================*/
@@ -13,7 +18,10 @@ class NewMessage extends Component {
   constructor(props) {
 
     super(props);
-    this.state = { message: '' };
+    this.state = {
+      message: '',
+      isRecording: false,
+    };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleMicrophone = this.handleMicrophone.bind(this);
@@ -26,7 +34,49 @@ class NewMessage extends Component {
   }
 
   handleMicrophone() {
-    console.log('open microphone');
+
+    const self = this;
+    const {
+      message,
+      isRecording,
+    } = this.state;
+
+    if (!isRecording) {
+
+      // start recording
+      recognition.start();
+
+      // record start
+      recognition.onstart = () => self.setState({ isRecording: true });
+
+      // record end
+      recognition.onspeechend = () => self.setState({ isRecording: false });
+
+      // record error
+      recognition.onerror = (event) => {
+        if (event.error === 'no-speech') self.setState({ isRecording: false });
+      };
+
+      // record result
+      recognition.onresult = (event) => {
+
+        // captured response
+        const index = event.resultIndex;
+        const transcript = event.results[index][0].transcript;
+
+        // error handler for some mobile devices
+        const repeat = (index === 1 && transcript === event.results[0][0].transcript);
+
+        // update message
+        if (!repeat) self.setState({ message: `${message} ${transcript}` });
+      };
+
+    } else {
+
+      // stop recording
+      recognition.stop();
+      this.setState({ isRecording: false });
+    }
   }
 
   handleMessage(event) {
@@ -34,13 +84,19 @@ class NewMessage extends Component {
   }
 
   render() {
+
+    const {
+      message,
+      isRecording,
+    } = this.state;
+
     return (
       <NewMessageContainer>
         <SpeechToTextContainer>
-          <StyledFontAwesomeIcon icon='microphone' onClick={this.handleMicrophone} />
+          <StyledFontAwesomeIcon icon={isRecording ? 'circle-notch' : 'microphone'} recording={isRecording.toString()} onClick={this.handleMicrophone} />
         </SpeechToTextContainer>
         <NewMessageForm onSubmit={this.handleSubmit}>
-          <MessageInput type='text' placeholder='Type something...' value={this.state.message} onChange={this.handleMessage} />
+          <MessageInput type='text' placeholder='Type something...' value={message} onChange={this.handleMessage} />
           <MessageSubmit type='submit' value='ADD MESSAGE' />
         </NewMessageForm>
       </NewMessageContainer>
@@ -67,8 +123,7 @@ const SpeechToTextContainer = styled.section`
 `;
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
-  color: #b4b4b4;
-  display: inline-block;
+  color: ${props => props.recording === 'true' ? '#FF6077' : '#b4b4b4'};
   font-size: 26px;
   cursor: pointer;
 `;
