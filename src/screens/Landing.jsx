@@ -2,10 +2,11 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 /*----------  Custom Imports  ----------*/
 import { ThreeIconGroup } from 'components';
-
+import * as routes from 'constants/routes';
 
 /*=========================================
 =            Landing Component            =
@@ -18,8 +19,9 @@ class Landing extends Component {
     this.handleRegister = this.handleRegister.bind(this);
   }
 
-  handleRegister(event) {
-    console.log(event.target);
+  handleRegister() {
+    const { history } = this.props;
+    history.push(routes.REGISTER);
   }
 
   render() {
@@ -34,6 +36,10 @@ class Landing extends Component {
     );
   }
 }
+
+Landing.propTypes = {
+  history: PropTypes.object,
+};
 
 export default withRouter(Landing);
 
