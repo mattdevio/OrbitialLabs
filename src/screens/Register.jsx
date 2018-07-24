@@ -1,8 +1,6 @@
 /*----------  Vendor Imports  ----------*/
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
-import swal from 'sweetalert';
 
 /*----------  Custom Imports  ----------*/
 
@@ -13,67 +11,65 @@ import swal from 'sweetalert';
 class Register extends Component {
 
   constructor(props) {
-
     super(props);
     this.state = {
       username: '',
       email: '',
       password: '',
     };
-
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleUsername = this.handleUsername.bind(this);
-    this.handleEmail = this.handleEmail.bind(this);
-    this.handlePassword = this.handlePassword.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleUsername(event) {
-    this.setState({ username: event.target.value });
-  }
-
-  handleEmail(event) {
-    this.setState({ email: event.target.value });
-  }
-
-  handlePassword(event) {
-    this.setState({ password: event.target.value });
+  handleChange(event) {
+    const mutation = {};
+    mutation[event.target.id] = event.target.value;
+    this.setState(mutation);
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    axios.post('/api/user/signup', {
-      ...this.state,
-    })
-      .then(() => {
-        swal('Welcome!', 'Thanks for joining!', 'success')
-          .then(() => {
-            console.log('do something');
-          });
-      })
-      .catch(({response}) => {
-        swal('Oops', response.data.message, 'error');
-      });
   }
 
   render() {
+    const {
+      username,
+      email,
+      password,
+    } = this.state;
     return (
       <CenterStack>
         <DescriptionContainer>
           <DescriptionHeader />
           <AuthForm onSubmit={this.handleSubmit}>
-            <AuthLabel>
+            <AuthLabel htmlFor='username'>
               username
-              <AuthInput type='text' value={this.state.username} onChange={this.handleUsername} />
+              <AuthInput
+                id='username'
+                type='text'
+                value={ username }
+                onChange={ this.handleChange }
+              />
             </AuthLabel>
-            <AuthLabel>
+            <AuthLabel htmlFor='email'>
               email
-              <AuthInput type='text' value={this.state.email} onChange={this.handleEmail} />
+              <AuthInput
+                id='email'
+                type='text'
+                value={ email }
+                onChange={ this.handleEmail }
+              />
             </AuthLabel>
-            <AuthLabel>
+            <AuthLabel htmlFor='password'>
               password
-              <AuthInput type='text' value={this.state.password} onChange={this.handlePassword} />
+              <AuthInput
+                id='password'
+                type='password'
+                value={ password }
+                onChange={ this.handlePassword }
+              />
             </AuthLabel>
-            <AuthInputSubmit type='submit' value='REGISTER' />
+            <AuthInputSubmit />
           </AuthForm>
         </DescriptionContainer>
       </CenterStack>
@@ -145,7 +141,10 @@ const AuthInput = styled.input`
   }
 `;
 
-const AuthInputSubmit = styled.input`
+const AuthInputSubmit = styled.input.attrs({
+  type: 'submit',
+  value: 'REGISTER',
+})`
   background: #FF6077;
   border: 0;
   border-radius: 5px;
