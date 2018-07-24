@@ -25,9 +25,7 @@ class Landing extends Component {
   render() {
     return (
       <CenterStack>
-        <CTAContainer>
-          <CallButton onClick={this.handleRegister} />
-        </CTAContainer>
+        <CallButton onClick={this.handleRegister} />
         <DescriptionContainer>
           <DescriptionHeader />
           <ThreeIconGroup />
@@ -42,23 +40,22 @@ export default withRouter(Landing);
 /*=====  End of Landing Component  ======*/
 
 const CenterStack = styled.div`
-  align-items: center;
+  width: 100%;
+  height: calc(100% - 150px);
+  margin-top: 150px;
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  position: relative;
-`;
-
-const CTAContainer = styled.div`
-  align-items: flex-end;
-  height: 325px;
-  display: flex;
+  align-items: center;
 `;
 
 const CallButton = styled.button.attrs({
   children: 'GET STARTED TODAY',
 })`
   background: #FF6077;
+  cursor: pointer;
   border: 0;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   border-radius: 5px;
@@ -68,10 +65,10 @@ const CallButton = styled.button.attrs({
   height: 75px;
   letter-spacing: 1px;
   width: 300px;
+  margin: auto 0;
 `;
 
 const DescriptionContainer = styled.article`
-  align-self: flex-end;
   background: #fff;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   border-radius: 10px 10px 0 0;
@@ -80,6 +77,7 @@ const DescriptionContainer = styled.article`
   height: 350px;
   justify-content: space-evenly;
   width: 670px;
+  margin-top: auto;
 `;
 
 const DescriptionHeader = styled.h3.attrs({

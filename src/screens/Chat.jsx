@@ -25,20 +25,27 @@ export default Chat;
 
 const CenterStack = styled.div`
   align-items: center;
+  height: calc(100% - 150px);
+  margin-top: 150px;
+  width: 100%;
+  padding: 0 15px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
 `;
 
 const DescriptionContainer = styled.article`
-  align-self: flex-end;
   background: #fff;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   border-radius: 10px 10px 0 0;
   display: flex;
   flex-direction: column;
-  height: 80%;
+  height: 100%;
   justify-content: space-between;
-  width: 670px;
+  max-width: 800px;
+  width: 100%;
 `;

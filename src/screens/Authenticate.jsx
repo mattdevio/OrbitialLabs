@@ -63,15 +63,19 @@ export default Authenticate;
 /*=====  End of Landing Component  ======*/
 
 const CenterStack = styled.div`
-  align-items: center;
+  width: 100%;
+  height: calc(100% - 150px);
+  margin-top: 150px;
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  position: relative;
 `;
 
 const DescriptionContainer = styled.article`
-  align-self: flex-end;
   background: #fff;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   border-radius: 10px;
@@ -89,6 +93,7 @@ const DescriptionHeader = styled.h3.attrs({
   font-weight: 300;
   letterSpacing: 1px;
   text-align: center;
+  margin: 0;
 `;
 
 const AuthForm = styled.form`
@@ -105,10 +110,16 @@ const AuthLabel = styled.label`
   justify-content: space-between;
   padding: 10px;
   width: 80%;
+  align-items: center;
 `;
 
 const AuthInput = styled.input`
   width: 200px;
+  padding: 5px;
+  font-size: 20px;
+  &:focus {
+    outline: none;
+  }
 `;
 
 const AuthInputSubmit = styled.input`
@@ -121,4 +132,8 @@ const AuthInputSubmit = styled.input`
   letter-spacing: 1px;
   margin-top: 50px;
   width: 200px;
+  cursor: pointer;
+  &:focus {
+    outline: none;
+  }
 `;

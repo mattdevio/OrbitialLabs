@@ -68,7 +68,9 @@ const SpeechToTextContainer = styled.section`
 
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   color: #b4b4b4;
+  display: inline-block;
   font-size: 26px;
+  cursor: pointer;
 `;
 
 const NewMessageForm = styled.form`
@@ -83,6 +85,9 @@ const MessageInput = styled.input`
   font-size: 14px;
   letter-spacing: 0.5px;
   width: 100%;
+  &:focus {
+    outline: none;
+  }
 `;
 
 const MessageSubmit = styled.input`
@@ -96,4 +101,8 @@ const MessageSubmit = styled.input`
   letter-spacing: 1px;
   margin: 0 10px;
   width: 300px;
+  &:focus {
+    outline: none;
+  }
+  cursor: pointer;
 `;

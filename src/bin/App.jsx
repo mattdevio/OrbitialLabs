@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Router, Switch, Route, Redirect } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCheckCircle, faLock, faSignal } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faLock, faSignal, faMicrophone, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 
 /*----------  Custom Imports  ----------*/
@@ -19,7 +19,7 @@ import {
 } from 'components';
 
 /*----------  Setup  ----------*/
-library.add(faCheckCircle, faLock, faSignal);
+library.add(faCheckCircle, faLock, faSignal, faMicrophone, faEllipsisH);
 
 /*=====================================
 =            App Component            =

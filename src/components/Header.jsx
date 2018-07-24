@@ -88,12 +88,15 @@ export default withRouter(Header);
 
 const HeaderContainer = styled.header`
   position: relative;
+  z-index: 1000;
   width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  padding: 35px 15px;
+  padding: 0 15px;
+  height: 150px;
+  box-sizing: border-box;
 `;
 
 const BrandContainer = styled.div`
