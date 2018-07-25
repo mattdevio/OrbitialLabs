@@ -58,7 +58,9 @@ class Authenticate extends Component {
                 onChange={ this.handleChange }
               />
             </AuthLabel>
-            <AuthInputSubmit />
+            <AuthInputSubmit>
+              SIGN IN
+            </AuthInputSubmit>
           </AuthForm>
         </DescriptionContainer>
       </CenterStack>
@@ -130,11 +132,11 @@ const AuthInput = styled.input`
   }
 `;
 
-const AuthInputSubmit = styled.input.attrs({
+const AuthInputSubmit = styled.button.attrs({
   input: 'submit',
-  value: 'SIGN IN',
 })`
   background: #FF6077;
+  text-align: center;
   border: 0;
   border-radius: 5px;
   color: #fff;

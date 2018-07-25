@@ -16,6 +16,7 @@ import {
 } from 'screens';
 import {
   Header,
+  withAuthentication,
 } from 'components';
 
 /*----------  Setup  ----------*/
@@ -52,7 +53,7 @@ class App extends Component {
 
 }
 
-export default App;
+export default withAuthentication(App);
 
 /*=====  End of App Component  ======*/
 

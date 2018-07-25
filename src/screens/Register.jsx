@@ -69,7 +69,9 @@ class Register extends Component {
                 onChange={ this.handlePassword }
               />
             </AuthLabel>
-            <AuthInputSubmit />
+            <AuthInputSubmit>
+              REGISTER
+            </AuthInputSubmit>
           </AuthForm>
         </DescriptionContainer>
       </CenterStack>
@@ -141,9 +143,8 @@ const AuthInput = styled.input`
   }
 `;
 
-const AuthInputSubmit = styled.input.attrs({
+const AuthInputSubmit = styled.button.attrs({
   type: 'submit',
-  value: 'REGISTER',
 })`
   background: #FF6077;
   border: 0;

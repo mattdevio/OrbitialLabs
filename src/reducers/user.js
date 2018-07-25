@@ -6,13 +6,13 @@ const INITIAL_STATE = {
 };
 
 /*----------  Configure Actions  ----------*/
-const setAuthorizedUser = (state, { username, email, password }) => {
-  if (!username || !email || !password) return state;
+const setAuthorizedUser = (state, { username, email, token }) => {
+  if (!username || !email || !token) return state;
   return {
     ...state,
     username,
     email,
-    password,
+    token,
   };
 };
 

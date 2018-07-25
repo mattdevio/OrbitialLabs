@@ -112,13 +112,18 @@ ApiRouter.post('/user/login', (req, res) => {
 
 }); // end post('/user/login')
 
-ApiRouter.get('/user/test', auth.verifyJWT_MW, (req, res) => {
+ApiRouter.get('/user/validate', auth.verifyJWT_MW, (req, res) => {
 
-  console.log(req.headers.authorization);
-  console.log(req.user);
-  res.send('ok');
+  const { username, email } = req.user;
 
-}); // end get('/user/test')
+  res.json({
+    username,
+    email,
+    success: true,
+    error: '',
+  });
+
+}); // end get('/user/validate')
 
 /*=====  End of ApiRouter  ======*/
 
