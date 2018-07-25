@@ -1,8 +1,16 @@
 /*----------  Vendor Imports  ----------*/
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
+import swal from 'sweetalert';
+import axios from 'axios';
+import PropTypes from 'prop-types';
 
 /*----------  Custom Imports  ----------*/
+import Storage from 'bin/LocalStorage';
+import { CHAT } from 'constants/routes';
+import { routeAuthorizedUsers } from 'components';
 
 /*=========================================
 =        Authentication Component         =
@@ -16,6 +24,9 @@ class Register extends Component {
       username: '',
       email: '',
       password: '',
+      usernameIsBad: false,
+      emailIsBad: false,
+      passwordIsBad: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -24,11 +35,46 @@ class Register extends Component {
   handleChange(event) {
     const mutation = {};
     mutation[event.target.id] = event.target.value;
+    mutation[`${event.target.id}IsBad`] = false;
     this.setState(mutation);
   }
 
   handleSubmit(event) {
     event.preventDefault();
+    this.validateFormFields(({ username, email, password }) => {
+      axios.post('/api/user/signup', { username, email, password })
+        .then(({ data }) => {
+          if (data.success) {
+            Storage.getInstance().setToken(data.token);
+            this.props.setAuthorizedUser(username, email, data.token);
+            this.props.history.push(CHAT);
+          } else {
+            swal(data.error);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          swal({
+            icon: 'error',
+            title: 'Oops!',
+            text: 'Something bad happened, please try again.',
+            button: true,
+          });
+        });
+
+    });
+  }
+
+  validateFormFields(callback) {
+    const s = { ...this.state };
+    s.username = s.username.trim();
+    s.email = s.email.trim();
+    s.password = s.password.trim();
+    if (!s.username) s.usernameIsBad = true;
+    if (!s.email) s.emailIsBad = true;
+    if (!s.password) s.passwordIsBad = true;
+    this.setState(s);
+    if (!s.usernameIsBad && !s.emailIsBad && !s.passwordIsBad) callback(s);
   }
 
   render() {
@@ -36,6 +82,9 @@ class Register extends Component {
       username,
       email,
       password,
+      usernameIsBad,
+      emailIsBad,
+      passwordIsBad,
     } = this.state;
     return (
       <CenterStack>
@@ -49,6 +98,7 @@ class Register extends Component {
                 type='text'
                 value={ username }
                 onChange={ this.handleChange }
+                isBad={ usernameIsBad }
               />
             </AuthLabel>
             <AuthLabel htmlFor='email'>
@@ -57,7 +107,8 @@ class Register extends Component {
                 id='email'
                 type='text'
                 value={ email }
-                onChange={ this.handleEmail }
+                onChange={ this.handleChange }
+                isBad={ emailIsBad }
               />
             </AuthLabel>
             <AuthLabel htmlFor='password'>
@@ -66,10 +117,14 @@ class Register extends Component {
                 id='password'
                 type='password'
                 value={ password }
-                onChange={ this.handlePassword }
+                onChange={ this.handleChange }
+                isBad={ passwordIsBad }
               />
             </AuthLabel>
-            <AuthInputSubmit />
+            { (usernameIsBad || emailIsBad || passwordIsBad) && <ErrorMessage /> }
+            <AuthInputSubmit>
+              REGISTER
+            </AuthInputSubmit>
           </AuthForm>
         </DescriptionContainer>
       </CenterStack>
@@ -77,7 +132,21 @@ class Register extends Component {
   }
 }
 
-export default Register;
+const mapDispatchToProps = dispatch => ({
+  setAuthorizedUser: (username, email, token) => dispatch({
+    type: 'SET_AUTHORIZED_USER',
+    username,
+    email,
+    token,
+  }),
+});
+
+Register.propTypes = {
+  setAuthorizedUser: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
+};
+
+export default routeAuthorizedUsers(withRouter(connect(null, mapDispatchToProps)(Register)));
 
 /*=====  End of Landing Component  ======*/
 
@@ -101,7 +170,7 @@ const DescriptionContainer = styled.article`
   display: flex;
   flex-direction: column;
   height: 400px;
-  justify-content: space-around;
+  justify-content: center;
   width: 400px;
 `;
 
@@ -112,7 +181,7 @@ const DescriptionHeader = styled.h3.attrs({
   font-weight: 300;
   letterSpacing: 1px;
   text-align: center;
-  margin: 0;
+  margin: 15px 0;
 `;
 
 const AuthForm = styled.form`
@@ -136,14 +205,24 @@ const AuthInput = styled.input`
   width: 200px;
   padding: 5px;
   font-size: 20px;
+  border-color: ${({isBad}) => isBad ? '#F00' : 'inherit'};
   &:focus {
     outline: none;
   }
 `;
 
-const AuthInputSubmit = styled.input.attrs({
+const ErrorMessage = styled.span.attrs({
+  children: 'All fields are required',
+})`
+  color: #F00;
+  padding: 5px 0;
+  display: block;
+  widthL 100%;
+  text-align: center;
+`;
+
+const AuthInputSubmit = styled.button.attrs({
   type: 'submit',
-  value: 'REGISTER',
 })`
   background: #FF6077;
   border: 0;
@@ -152,7 +231,6 @@ const AuthInputSubmit = styled.input.attrs({
   font-size: 16px;
   height: 40px;
   letter-spacing: 1px;
-  margin-top: 50px;
   width: 200px;
   cursor: pointer;
   &:focus {

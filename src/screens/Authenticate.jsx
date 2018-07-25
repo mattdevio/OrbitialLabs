@@ -1,8 +1,16 @@
 /*----------  Vendor Imports  ----------*/
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import swal from 'sweetalert';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 /*----------  Custom Imports  ----------*/
+import { routeAuthorizedUsers } from 'components';
+import Storage from 'bin/LocalStorage';
+import { CHAT } from 'constants/routes';
 
 /*=========================================
 =        Authentication Component         =
@@ -15,6 +23,8 @@ class Authenticate extends Component {
     this.state = {
       email: '',
       password: '',
+      emailIsBad: false,
+      passwordIsBad: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -28,6 +38,37 @@ class Authenticate extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    this.validateFormFields(({ email, password }) => {
+      axios.post('/api/user/login', { email, password})
+        .then(({data}) => {
+          if (data.success) {
+            Storage.getInstance().setToken(data.token);
+            this.props.setAuthorizedUser(data.username, data.email, data.token);
+            this.props.history.push(CHAT);
+          } else {
+            swal(data.error);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          swal({
+            icon: 'error',
+            title: 'Oops!',
+            text: 'Something bad happened, please try again.',
+            button: true,
+          });
+        });
+    });
+  }
+
+  validateFormFields(callback) {
+    const s = { ...this.state };
+    s.email = s.email.trim();
+    s.password = s.password.trim();
+    if (!s.email) s.emailIsBad = true;
+    if (!s.password) s.passwordIsBad = true;
+    this.setState(s);
+    if (!s.emailIsBad && !s.passwordIsBad) callback(s);
   }
 
   render() {
@@ -58,7 +99,9 @@ class Authenticate extends Component {
                 onChange={ this.handleChange }
               />
             </AuthLabel>
-            <AuthInputSubmit />
+            <AuthInputSubmit>
+              SIGN IN
+            </AuthInputSubmit>
           </AuthForm>
         </DescriptionContainer>
       </CenterStack>
@@ -66,7 +109,21 @@ class Authenticate extends Component {
   }
 }
 
-export default Authenticate;
+const mapDispatchToProps = dispatch => ({
+  setAuthorizedUser: (username, email, token) => dispatch({
+    type: 'SET_AUTHORIZED_USER',
+    username,
+    email,
+    token,
+  }),
+});
+
+Authenticate.propTypes = {
+  history: PropTypes.object.isRequired,
+  setAuthorizedUser: PropTypes.func.isRequired,
+};
+
+export default routeAuthorizedUsers(withRouter(connect(null, mapDispatchToProps)(Authenticate)));
 
 /*=====  End of Landing Component  ======*/
 
@@ -130,11 +187,11 @@ const AuthInput = styled.input`
   }
 `;
 
-const AuthInputSubmit = styled.input.attrs({
+const AuthInputSubmit = styled.button.attrs({
   input: 'submit',
-  value: 'SIGN IN',
 })`
   background: #FF6077;
+  text-align: center;
   border: 0;
   border-radius: 5px;
   color: #fff;

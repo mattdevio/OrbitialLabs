@@ -71,8 +71,9 @@ function verifyJWT_MW(req, res, next) {
     })
     .catch((err) => {
       util.error(err);
-      res.status(403).json({
+      res.json({
         error: 'Unauthorized',
+        success: false,
       });
     });
 }

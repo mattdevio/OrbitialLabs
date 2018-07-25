@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import {
   NewMessage,
   MessageList,
+  withAuthorization,
 } from 'components';
 
 /*=========================================
@@ -21,7 +22,7 @@ const Chat = () => (
   </CenterStack>
 );
 
-export default Chat;
+export default withAuthorization(Chat);
 
 /*=====  End of Chat Component  ======*/
 
