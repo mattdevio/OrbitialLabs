@@ -96,6 +96,8 @@ ApiRouter.post('/user/login', (req, res) => {
               email: user.email,
             },
           }),
+          username: user.username,
+          email: user.email,
           success: true,
         });
       } else {

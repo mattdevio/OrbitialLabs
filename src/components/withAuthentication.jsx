@@ -33,10 +33,15 @@ const withAuthentication = (Component) => {
           },
         })
           .then(({ data }) => {
-            this.props.setAuthorizedUser(data.username, data.email, token);
+            if (data.success) {
+              this.props.setAuthorizedUser(data.username, data.email, token);
+            } else {
+              s.setToken(null);
+            }
           })
           .catch((error) => {
             console.dir(error);
+            s.setToken(null);
           });
       }
       this.setState({

@@ -8,7 +8,6 @@ import PropTypes from 'prop-types';
 import { AUTH } from 'constants/routes';
 
 
-
 /**
  * withAuthorization - HOC that renders components for authorized users only.
  * @param  {ReactNode} Component [The react component to protect]

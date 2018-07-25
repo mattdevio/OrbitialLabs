@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 /*----------  Custom Imports  ----------*/
 import { CHAT } from 'constants/routes';
 
+
 /**
  * routeAuthorizedUsers - HOC that routes authorized users hitting unprotected routes to a protected page
  * @param  {ReactNode} Component [The component to wrap]
