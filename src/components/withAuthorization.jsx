@@ -10,9 +10,9 @@ import { AUTH } from 'constants/routes';
 
 
 /**
- * withAuthorization - Renders components for authorized users only.
- * @param  {[type]} Component [description]
- * @return {[type]}           [description]
+ * withAuthorization - HOC that renders components for authorized users only.
+ * @param  {ReactNode} Component [The react component to protect]
+ * @return {ReactNode}           [The protected react node]
  */
 const withAuthorization = (Component) => {
   class WithAuthorization extends React.Component {

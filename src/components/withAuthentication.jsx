@@ -7,6 +7,12 @@ import PropTypes from 'prop-types';
 /*----------  Custom Imports  ----------*/
 import Storage from 'bin/LocalStorage';
 
+
+/**
+ * withAuthentication - HOC that loads & verifies a jwt from local storage
+ * @param  {ReactNode} Component [The component to wrap]
+ * @return {ReactNode}           [The component with the load & verify functionality]
+ */
 const withAuthentication = (Component) => {
   class WithAuthentication extends React.Component {
 
@@ -42,7 +48,7 @@ const withAuthentication = (Component) => {
       return this.state.ready ? <Component /> : null;
     }
 
-  }
+  } // end class WithAuthentication
 
   const mapDispatchToProps = dispatch => ({
     setAuthorizedUser: (username, email, token) => dispatch({

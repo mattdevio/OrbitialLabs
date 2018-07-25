@@ -5,8 +5,11 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 /*----------  Custom Imports  ----------*/
-import { ThreeIconGroup } from 'components';
-import * as routes from 'constants/routes';
+import { 
+  ThreeIconGroup,
+  routeAuthorizedUsers,
+} from 'components';
+import { REGISTER } from 'constants/routes';
 
 /*=========================================
 =            Landing Component            =
@@ -21,7 +24,7 @@ class Landing extends Component {
 
   handleRegister() {
     const { history } = this.props;
-    history.push(routes.REGISTER);
+    history.push(REGISTER);
   }
 
   render() {
@@ -41,7 +44,7 @@ Landing.propTypes = {
   history: PropTypes.object,
 };
 
-export default withRouter(Landing);
+export default routeAuthorizedUsers(withRouter(Landing));
 
 /*=====  End of Landing Component  ======*/
 

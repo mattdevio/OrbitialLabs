@@ -23,7 +23,7 @@ class Storage {
     if (token) {
       localStorage.setItem('TOKEN', token);
     } else {
-      localStorage.removeItem(token);
+      localStorage.removeItem('TOKEN');
     }
   }
 

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 /*----------  Custom Imports  ----------*/
+import { routeAuthorizedUsers } from 'components';
 
 /*=========================================
 =        Authentication Component         =
@@ -68,7 +69,7 @@ class Authenticate extends Component {
   }
 }
 
-export default Authenticate;
+export default routeAuthorizedUsers(Authenticate);
 
 /*=====  End of Landing Component  ======*/
 

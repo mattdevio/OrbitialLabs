@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 /*----------  Custom Imports  ----------*/
 import Storage from 'bin/LocalStorage';
 import { CHAT } from 'constants/routes';
+import { routeAuthorizedUsers } from 'components';
 
 /*=========================================
 =        Authentication Component         =
@@ -145,7 +146,7 @@ Register.propTypes = {
   history: PropTypes.object.isRequired,
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(Register));
+export default routeAuthorizedUsers(withRouter(connect(null, mapDispatchToProps)(Register)));
 
 /*=====  End of Landing Component  ======*/
 

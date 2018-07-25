@@ -1,11 +1,13 @@
 /*----------  Vendor Imports  ----------*/
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { withRouter, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 /*----------  Custom Imports  ----------*/
 import * as routes from 'constants/routes';
+import Storage from 'bin/LocalStorage';
 
 /*=========================================
 =            Header Component            =
@@ -18,8 +20,8 @@ class Header extends Component {
     this.state = {
       routes: this.getRoutes(props.location.pathname),
     };
-    props.history.listen(this.onRouteChange.bind(this));
     this.handleBrandClick = this.handleBrandClick.bind(this);
+    this.signUserOut = this.signUserOut.bind(this);
   }
 
   handleBrandClick() {
@@ -27,19 +29,9 @@ class Header extends Component {
     history.push(routes.LANDING);
   }
 
-  onRouteChange(location, action) {
-    const oldPath = this.props.location.pathname;
-    const newPath = location.pathname;
-    if (action !== 'PUSH' || oldPath !== newPath) {
-      this.setState({
-        routes: this.getRoutes(newPath),
-      });
-    }
-  }
-
-  getRoutes(path) {
+  getRoutes() {
     const newRoutes = {};
-    switch (path) {
+    switch (this.props.location.pathname) {
       case routes.LANDING:
         newRoutes[routes.AUTH] = 'login';
         break;
@@ -56,7 +48,16 @@ class Header extends Component {
     return newRoutes;
   }
 
+  signUserOut() {
+    const { history, logoutUser } = this.props;
+    Storage.getInstance().setToken();
+    logoutUser();
+    if (history.onSignOut) history.onSignOut();
+    history.push(routes.AUTH);
+  }
+
   render() {
+    const displayRoutes = this.getRoutes();
     return (
       <HeaderContainer>
         <BrandContainer onClick={ this.handleBrandClick }>
@@ -66,23 +67,40 @@ class Header extends Component {
           </Name>
         </BrandContainer>
         <NavigationContainer>
-          {Object.keys(this.state.routes).map(key => (
-            <NavLink key={ key } to={ key }>
-              { this.state.routes[key] }
-            </NavLink>
-          ))}
+          {Object.keys(displayRoutes).map((key) => {
+
+            if (key === routes.LOGOUT) {
+              return (
+                <SignOutBtn key={ key } onClick={ this.signUserOut }>
+                  { displayRoutes[key] }
+                </SignOutBtn>
+              );
+            }
+            return (
+              <NavLink key={ key } to={ key }>
+                { displayRoutes[key] }
+              </NavLink>
+            );
+          })}
         </NavigationContainer>
       </HeaderContainer>
     );
   }
 }
 
+const mapDispatchToProps = dispatch => ({
+  logoutUser: () => dispatch({
+    type: 'LOGOUT_USER',
+  }),
+});
+
 Header.propTypes = {
   history: PropTypes.object,
   location: PropTypes.object,
+  logoutUser: PropTypes.func.isRequired,
 };
 
-export default withRouter(Header);
+export default withRouter(connect(null, mapDispatchToProps)(Header));
 
 /*=====  End of Header Component  ======*/
 
@@ -135,7 +153,7 @@ const NavigationContainer = styled.nav`
   }
 `;
 
-const NavLink = styled(Link)`
+const btnStyle = css`
   border: 2px solid #FFFFFF;
   border-radius: 5px;
   text-transform: lowercase;
@@ -150,6 +168,8 @@ const NavLink = styled(Link)`
   display: inline-block;
   position: relative;
   transition: 0.3s all;
+  background: transparent;
+  cursor: pointer;
   &:hover {
     background: #FF6077;
     color: #FFFFFF;
@@ -159,4 +179,12 @@ const NavLink = styled(Link)`
   &:focus {
     outline: none;
   }
+`;
+
+const NavLink = styled(Link)`
+  ${btnStyle}
+`;
+
+const SignOutBtn = styled.button`
+  ${btnStyle}
 `;

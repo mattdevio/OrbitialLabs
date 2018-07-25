@@ -8,6 +8,7 @@ import NewMessage from './NewMessage';
 import ThreeIconGroup from './ThreeIconGroup';
 import withAuthentication from './withAuthentication';
 import withAuthorization from './withAuthorization';
+import routeAuthorizedUsers from './routeAuthorizedUsers';
 
 export {
   Header,
@@ -17,4 +18,5 @@ export {
   ThreeIconGroup,
   withAuthentication,
   withAuthorization,
+  routeAuthorizedUsers,
 };
