@@ -93,7 +93,11 @@ class NewMessage extends Component {
     return (
       <NewMessageContainer>
         <SpeechToTextContainer>
-          <StyledFontAwesomeIcon icon={isRecording ? 'circle-notch' : 'microphone'} recording={isRecording.toString()} onClick={this.handleMicrophone} />
+          <StyledFontAwesomeIcon 
+            icon={ isRecording ? 'circle-notch' : 'microphone' }
+            recording={ isRecording.toString() }
+            onClick={ this.handleMicrophone }
+          />
         </SpeechToTextContainer>
         <NewMessageForm onSubmit={this.handleSubmit}>
           <MessageInput type='text' placeholder='Type something...' value={message} onChange={this.handleMessage} />
@@ -125,6 +129,7 @@ const SpeechToTextContainer = styled.section`
 const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
   color: ${props => props.recording === 'true' ? '#FF6077' : '#b4b4b4'};
   font-size: 26px;
+  cursor: pointer;
 `;
 
 const NewMessageForm = styled.form`
@@ -139,6 +144,9 @@ const MessageInput = styled.input`
   font-size: 14px;
   letter-spacing: 0.5px;
   width: 100%;
+  &:focus {
+    outline: none;
+  }
 `;
 
 const MessageSubmit = styled.input`
@@ -152,4 +160,8 @@ const MessageSubmit = styled.input`
   letter-spacing: 1px;
   margin: 0 10px;
   width: 300px;
+  &:focus {
+    outline: none;
+  }
+  cursor: pointer;
 `;

@@ -1,108 +1,162 @@
 /*----------  Vendor Imports  ----------*/
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
+import { withRouter, Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 /*----------  Custom Imports  ----------*/
-import history from '../services/history';
+import * as routes from 'constants/routes';
 
 /*=========================================
 =            Header Component            =
 =========================================*/
 
-const handleHome = () => history.replace('/');
-const handleAuth = () => history.replace('/auth');
-const handleRegister = () => history.replace('/register');
-const handleSignOut = () => history.replace('/');
+class Header extends Component {
 
-const UserLinks = () => {
+  constructor(props) {
+    super(props);
+    this.state = {
+      routes: this.getRoutes(props.location.pathname),
+    };
+    props.history.listen(this.onRouteChange.bind(this));
+    this.handleBrandClick = this.handleBrandClick.bind(this);
+  }
 
-  const location = window.location.href;
-  if (location.includes('auth')) return <RegisterLink onClick={handleRegister} />;
-  else if (location.includes('chat')) return <SignOutLink onClick={handleSignOut} />;
-  else return <AuthLink onClick={handleAuth} />;
+  handleBrandClick() {
+    const { history } = this.props;
+    history.push(routes.LANDING);
+  }
+
+  onRouteChange(location, action) {
+    const oldPath = this.props.location.pathname;
+    const newPath = location.pathname;
+    if (action !== 'PUSH' || oldPath !== newPath) {
+      this.setState({
+        routes: this.getRoutes(newPath),
+      });
+    }
+  }
+
+  getRoutes(path) {
+    const newRoutes = {};
+    switch (path) {
+      case routes.LANDING:
+        newRoutes[routes.AUTH] = 'login';
+        break;
+      case routes.AUTH:
+        newRoutes[routes.REGISTER] = 'sign up';
+        break;
+      case routes.REGISTER:
+        newRoutes[routes.AUTH] = 'login';
+        break;
+      case routes.CHAT:
+        newRoutes[routes.LOGOUT] = 'sign out';
+        break;
+    }
+    return newRoutes;
+  }
+
+  render() {
+    return (
+      <HeaderContainer>
+        <BrandContainer onClick={ this.handleBrandClick }>
+          <Logo />
+          <Name>
+            public square
+          </Name>
+        </BrandContainer>
+        <NavigationContainer>
+          {Object.keys(this.state.routes).map(key => (
+            <NavLink key={ key } to={ key }>
+              { this.state.routes[key] }
+            </NavLink>
+          ))}
+        </NavigationContainer>
+      </HeaderContainer>
+    );
+  }
+}
+
+Header.propTypes = {
+  history: PropTypes.object,
+  location: PropTypes.object,
 };
 
-const Header = () => (
-  <HeaderContainer>
-    <BrandContainer>
-      <Logo onClick={handleHome} src='./assets/images/logo.png'></Logo>
-      <Name></Name>
-    </BrandContainer>
-    <AuthContainer>
-      {UserLinks()}
-    </AuthContainer>
-  </HeaderContainer>
-);
-
-export default Header;
+export default withRouter(Header);
 
 /*=====  End of Header Component  ======*/
 
-const HeaderContainer = styled.nav`
+const HeaderContainer = styled.header`
+  position: relative;
+  z-index: 1000;
+  width: 100%;
   display: flex;
-  height: 150px;
-  justify-content: space-between;
-  position: absolute;
-  width: 100vw;
-  z-index: 2;
-`;
-
-const BrandContainer = styled.section`
+  flex-direction: row;
   align-items: center;
-  display: flex;
-  height: 100%;
-  justify-content: space-evenly;
-  width: 450px;
+  justify-content: space-around;
+  padding: 0 15px;
+  height: 150px;
+  box-sizing: border-box;
 `;
 
-const Logo = styled.img`
+const BrandContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 325px;
+  cursor: pointer;
+`;
+
+const Logo = styled.img.attrs({
+  src: './assets/images/logo.png',
+})`
   border-radius: 10px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   height: 65px;
   width: 65px;
 `;
 
-const Name = styled.div.attrs({
-  children: 'public square',
-})`
+const Name = styled.h1`
   color: #fff;
   letter-spacing: 1px;
   font-size: 35px;
+  margin: 0;
+  padding: 0;
 `;
 
-const AuthContainer = styled.section`
-  align-items: center;
-  display: flex;
-  height: 100%;
-  width: 200px;
+const NavigationContainer = styled.nav`
+  display: inline-block;
+  > * {
+    margin-right: 5px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
 `;
 
-const LinkDefault = `
-  background: transparent;
-  border: 1px solid #fff;
+const NavLink = styled(Link)`
+  border: 2px solid #FFFFFF;
   border-radius: 5px;
-  color: #fff;
+  text-transform: lowercase;
+  text-decoration: none;
+  color: #FFFFFF;
   font-size: 18px;
-  font-weight: 300;
-  height: 50px;
+  font-weight: 800;
   letter-spacing: 2px;
-  width: 125px;
-`;
-
-const AuthLink = styled.button.attrs({
-  children: 'sign in',
-})`
-  ${LinkDefault}
-`;
-
-const RegisterLink = styled.button.attrs({
-  children: 'register',
-})`
-  ${LinkDefault}
-`;
-
-const SignOutLink = styled.button.attrs({
-  children: 'sign out',
-})`
-  ${LinkDefault}
+  padding: 10px 0;
+  width: 150px;
+  text-align: center;
+  display: inline-block;
+  position: relative;
+  transition: 0.3s all;
+  &:hover {
+    background: #FF6077;
+    color: #FFFFFF;
+    border-color: #FF6077;
+    outline: none;
+  }
+  &:focus {
+    outline: none;
+  }
 `;

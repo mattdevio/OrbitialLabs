@@ -3,62 +3,51 @@ import React from 'react';
 import styled from 'styled-components';
 
 /*----------  Custom Imports  ----------*/
-import Header from '../components/Header';
-import NewMessage from '../components/NewMessage';
-import MessageList from '../components/MessageList';
+import {
+  NewMessage,
+  MessageList,
+} from 'components';
 
 /*=========================================
 =            Chat Component            =
 =========================================*/
 
 const Chat = () => (
-  <LandingMainContainer>
-    <Header />
-    <BackgroundGradient />
-    <CenterStack>
-      <DescriptionContainer>
-        <NewMessage />
-        <MessageList />
-      </DescriptionContainer>
-    </CenterStack>
-  </LandingMainContainer>
+  <CenterStack>
+    <DescriptionContainer>
+      <NewMessage />
+      <MessageList />
+    </DescriptionContainer>
+  </CenterStack>
 );
 
 export default Chat;
 
 /*=====  End of Chat Component  ======*/
 
-const LandingMainContainer = styled.main`
-  display: flex;
-  height: 100vh;
-  justify-content: center;
-  width: 100vw;
-`;
-
-const BackgroundGradient = styled.div`
-  background: linear-gradient(90deg, rgba(85,91,186,1) 0%, rgba(16,218,255,1) 100%);
-  clip-path: polygon(0 0, 6000px 0, 1600px 75%, 0 100%);
-  height: 90%;
-  position: absolute;
-  width: 100%;
-`;
-
 const CenterStack = styled.div`
   align-items: center;
+  height: calc(100% - 150px);
+  margin-top: 150px;
+  width: 100%;
+  padding: 0 15px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
 `;
 
 const DescriptionContainer = styled.article`
-  align-self: flex-end;
   background: #fff;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   border-radius: 10px 10px 0 0;
   display: flex;
   flex-direction: column;
-  height: 80%;
+  height: 100%;
   justify-content: space-between;
-  width: 670px;
+  max-width: 800px;
+  width: 100%;
 `;

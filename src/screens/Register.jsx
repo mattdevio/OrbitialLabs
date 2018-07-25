@@ -1,12 +1,8 @@
 /*----------  Vendor Imports  ----------*/
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
-import swal from 'sweetalert';
 
 /*----------  Custom Imports  ----------*/
-import history from '../services/history';
-import Header from '../components/Header';
 
 /*=========================================
 =        Authentication Component         =
@@ -15,72 +11,68 @@ import Header from '../components/Header';
 class Register extends Component {
 
   constructor(props) {
-
     super(props);
     this.state = {
       username: '',
       email: '',
       password: '',
     };
-
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleUsername = this.handleUsername.bind(this);
-    this.handleEmail = this.handleEmail.bind(this);
-    this.handlePassword = this.handlePassword.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleUsername(event) {
-    this.setState({ username: event.target.value });
-  }
-
-  handleEmail(event) {
-    this.setState({ email: event.target.value });
-  }
-
-  handlePassword(event) {
-    this.setState({ password: event.target.value });
+  handleChange(event) {
+    const mutation = {};
+    mutation[event.target.id] = event.target.value;
+    this.setState(mutation);
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    axios.post('/api/user/signup', {
-      ...this.state,
-    })
-      .then(() => {
-        swal('Welcome!', 'Thanks for joining!', 'success')
-          .then(() => history.replace('/chat'));
-      })
-      .catch(({response}) => {
-        swal('Oops', response.data.message, 'error');
-      });
   }
 
   render() {
+    const {
+      username,
+      email,
+      password,
+    } = this.state;
     return (
-      <LandingMainContainer>
-        <Header />
-        <BackgroundGradient />
-        <CenterStack>
-          <DescriptionContainer>
-            <DescriptionHeader />
-            <AuthForm onSubmit={this.handleSubmit}>
-              <AuthLabel>
-                username
-                <AuthInput type='text' value={this.state.username} onChange={this.handleUsername} />
-              </AuthLabel>
-              <AuthLabel>
-                email
-                <AuthInput type='text' value={this.state.email} onChange={this.handleEmail} />
-              </AuthLabel>
-              <AuthLabel>
-                password
-                <AuthInput type='text' value={this.state.password} onChange={this.handlePassword} />
-              </AuthLabel>
-              <AuthInputSubmit type='submit' value='REGISTER' />
-            </AuthForm>
-          </DescriptionContainer>
-        </CenterStack>
-      </LandingMainContainer>
+      <CenterStack>
+        <DescriptionContainer>
+          <DescriptionHeader />
+          <AuthForm onSubmit={this.handleSubmit}>
+            <AuthLabel htmlFor='username'>
+              username
+              <AuthInput
+                id='username'
+                type='text'
+                value={ username }
+                onChange={ this.handleChange }
+              />
+            </AuthLabel>
+            <AuthLabel htmlFor='email'>
+              email
+              <AuthInput
+                id='email'
+                type='text'
+                value={ email }
+                onChange={ this.handleEmail }
+              />
+            </AuthLabel>
+            <AuthLabel htmlFor='password'>
+              password
+              <AuthInput
+                id='password'
+                type='password'
+                value={ password }
+                onChange={ this.handlePassword }
+              />
+            </AuthLabel>
+            <AuthInputSubmit />
+          </AuthForm>
+        </DescriptionContainer>
+      </CenterStack>
     );
   }
 }
@@ -88,31 +80,21 @@ class Register extends Component {
 export default Register;
 
 /*=====  End of Landing Component  ======*/
-const LandingMainContainer = styled.main`
-  display: flex;
-  height: 100vh;
-  justify-content: center;
-  width: 100vw;
-`;
-
-const BackgroundGradient = styled.div`
-  background: linear-gradient(90deg, rgba(85,91,186,1) 0%, rgba(16,218,255,1) 100%);
-  clip-path: polygon(0 0, 6000px 0, 1600px 75%, 0 100%);
-  height: 90%;
-  position: absolute;
-  width: 100%;
-`;
 
 const CenterStack = styled.div`
-  align-items: center;
+  width: 100%;
+  height: calc(100% - 150px);
+  margin-top: 150px;
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  position: relative;
 `;
 
 const DescriptionContainer = styled.article`
-  align-self: flex-end;
   background: #fff;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   border-radius: 10px;
@@ -130,6 +112,7 @@ const DescriptionHeader = styled.h3.attrs({
   font-weight: 300;
   letterSpacing: 1px;
   text-align: center;
+  margin: 0;
 `;
 
 const AuthForm = styled.form`
@@ -146,13 +129,22 @@ const AuthLabel = styled.label`
   justify-content: space-between;
   padding: 10px;
   width: 80%;
+  align-items: center;
 `;
 
 const AuthInput = styled.input`
   width: 200px;
+  padding: 5px;
+  font-size: 20px;
+  &:focus {
+    outline: none;
+  }
 `;
 
-const AuthInputSubmit = styled.input`
+const AuthInputSubmit = styled.input.attrs({
+  type: 'submit',
+  value: 'REGISTER',
+})`
   background: #FF6077;
   border: 0;
   border-radius: 5px;
@@ -162,4 +154,8 @@ const AuthInputSubmit = styled.input`
   letter-spacing: 1px;
   margin-top: 50px;
   width: 200px;
+  cursor: pointer;
+  &:focus {
+    outline: none;
+  }
 `;

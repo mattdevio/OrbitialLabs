@@ -19,7 +19,7 @@ module.exports = async function () {
     );
     babelRc = JSON.parse(babelRc);
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
 
   return {
