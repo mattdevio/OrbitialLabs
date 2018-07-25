@@ -11,7 +11,7 @@ class Storage {
     }
   }
 
-  getInstance() {
+  static getInstance() {
     if (!Storage.__instance) {
       Storage.__instance = new Storage();
     }
@@ -20,18 +20,17 @@ class Storage {
 
   setToken(token) {
     if (this.useNoOp) return;
-    if (typeof token === 'undefined') {
-      localStorage.removeItem('TOKEN');
+    if (token) {
+      localStorage.setItem('TOKEN', token);
     } else {
-      localStorage.getItem('TOKEN', token);
+      localStorage.removeItem(token);
     }
   }
 
   getToken() {
     if (this.useNoOp) return;
-    if (localStorage.TOKEN) {
-      return localStorage.TOKEN;
-    }
+    const token = localStorage.TOKEN ? localStorage.TOKEN : undefined;
+    return token;
   }
 
 }
