@@ -8,6 +8,7 @@ import rootReducer from '../reducers';
 =            Create Global Store            =
 ===========================================*/
 
+// Get redux-dev-tools here: https://github.com/zalmoxisus/redux-devtools-extension
 const store = createStore(rootReducer, /* preloadedState, */
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );

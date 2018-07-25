@@ -5,6 +5,7 @@ Public Square
 ![MERN Stack](https://img.shields.io/badge/stack-MERN-green.svg)
 ![Fullsail Class - WD6](https://img.shields.io/badge/class-WD6-blue.svg)
 ![MongoDB Version 3.2](https://img.shields.io/badge/mongo-v3.2-red.svg)
+[![Get Redux Dev Tools!](https://img.shields.io/badge/redux-v4.0.0-yellow.svg)](https://github.com/zalmoxisus/redux-devtools-extension)
 
 Public Square is a messenger application built by Orbital Labs; a small group of students @ Full Sail University.
 
