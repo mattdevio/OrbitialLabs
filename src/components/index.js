@@ -7,6 +7,7 @@ import MessageList from './MessageList';
 import NewMessage from './NewMessage';
 import ThreeIconGroup from './ThreeIconGroup';
 import withAuthentication from './withAuthentication';
+import withAuthorization from './withAuthorization';
 
 export {
   Header,
@@ -15,4 +16,5 @@ export {
   NewMessage,
   ThreeIconGroup,
   withAuthentication,
+  withAuthorization,
 };

@@ -15,7 +15,7 @@ FileRouter.get('*', (req, res) => {
 
   try {
     res.render('index', {
-      bundles: ['app.bundle.js', 'polyfill.bundle.js'],
+      bundles: ['polyfill.bundle.js', 'app.bundle.js'],
     });
   } catch (e) {
     util.error(e.message);

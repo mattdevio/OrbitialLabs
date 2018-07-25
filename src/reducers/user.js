@@ -7,9 +7,7 @@ const INITIAL_STATE = {
 
 /*----------  Configure Actions  ----------*/
 const setAuthorizedUser = (state, { username, email, token }) => {
-  console.log(username, email, token);
   if (!username || !email || !token) return state;
-  console.log('looks good');
   return {
     ...state,
     username,

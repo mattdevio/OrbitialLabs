@@ -2,6 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 /*----------  Custom Imports  ----------*/
 import Storage from 'bin/LocalStorage';
@@ -9,28 +10,36 @@ import Storage from 'bin/LocalStorage';
 const withAuthentication = (Component) => {
   class WithAuthentication extends React.Component {
 
-    componentDidMount() {
+    constructor(props) {
+      super(props);
+      this.state = {
+        ready: false,
+      };
+    }
+
+    async componentDidMount() {
       const s = Storage.getInstance();
       const token = s.getToken();
       if (token) {
-        axios.get('/api/user/validate', {
+        await axios.get('/api/user/validate', {
           headers: {
             authorization: token,
           },
         })
           .then(({ data }) => {
-            console.log(data);
+            this.props.setAuthorizedUser(data.username, data.email, token);
           })
           .catch((error) => {
             console.dir(error);
           });
       }
+      this.setState({
+        ready: true,
+      });
     }
 
     render() {
-      return (
-        <Component />
-      );
+      return this.state.ready ? <Component /> : null;
     }
 
   }
@@ -43,6 +52,10 @@ const withAuthentication = (Component) => {
       token: token,
     }),
   });
+
+  WithAuthentication.propTypes = {
+    setAuthorizedUser: PropTypes.func.isRequired,
+  };
 
   return connect(null, mapDispatchToProps)(WithAuthentication);
 
