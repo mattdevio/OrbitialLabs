@@ -46,6 +46,7 @@ app.use(morgan('dev'));
 app.set('view engine', 'pug');
 app.set('views', path.resolve(__dirname, './views'));
 app.use('/assets', express.static(path.resolve(__dirname, './assets')));
+app.use('/favicon.ico', express.static(path.resolve(__dirname, './assets/images/favicon.png')));
 
 // Open mongoose DB connection
 mongoose.connect('mongodb://localhost:27017/PublicSquare', { useNewUrlParser: true });
