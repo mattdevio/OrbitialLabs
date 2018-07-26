@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Router, Switch, Route, Redirect } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCheckCircle, faLock, faSignal, faMicrophone, faEllipsisH, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faLock, faSignal, faMicrophone, faEllipsisH, faCircleNotch, faPencilAlt, faTimes, faCheck, faBan } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 
 /*----------  Custom Imports  ----------*/
@@ -20,7 +20,7 @@ import {
 } from 'components';
 
 /*----------  Setup  ----------*/
-library.add(faCheckCircle, faLock, faSignal, faMicrophone, faEllipsisH, faCircleNotch);
+library.add(faCheckCircle, faLock, faSignal, faMicrophone, faEllipsisH, faCircleNotch, faPencilAlt, faTimes, faCheck, faBan);
 
 /*=====================================
 =            App Component            =
