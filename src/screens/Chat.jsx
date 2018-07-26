@@ -1,6 +1,9 @@
 /*----------  Vendor Imports  ----------*/
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
+import io from 'socket.io-client';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 /*----------  Custom Imports  ----------*/
 import {
@@ -13,16 +16,37 @@ import {
 =            Chat Component            =
 =========================================*/
 
-const Chat = () => (
-  <CenterStack>
-    <DescriptionContainer>
-      <NewMessage />
-      <MessageList />
-    </DescriptionContainer>
-  </CenterStack>
-);
 
-export default withAuthorization(Chat);
+class Chat extends Component {
+
+  constructor(props) {
+    super(props);
+    this.socket = io({
+
+    });
+  }
+
+  render() {
+    return (
+      <CenterStack>
+        <DescriptionContainer>
+          <NewMessage />
+          <MessageList />
+        </DescriptionContainer>
+      </CenterStack>
+    );
+  }
+}
+
+const mapStateToProps = state => ({
+  token: state.userState.token,
+});
+
+Chat.propTypes = {
+  token: PropTypes.string.isRequired,
+};
+
+export default withAuthorization(connect(mapStateToProps)(Chat));
 
 /*=====  End of Chat Component  ======*/
 
