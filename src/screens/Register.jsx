@@ -188,7 +188,7 @@ const AuthForm = styled.form`
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: 235px;
+  height: 270px;
 `;
 
 const AuthLabel = styled.label`
@@ -231,6 +231,7 @@ const AuthInputSubmit = styled.button.attrs({
   font-size: 16px;
   height: 40px;
   letter-spacing: 1px;
+  margin-top: 25px;
   width: 200px;
   cursor: pointer;
   &:focus {
