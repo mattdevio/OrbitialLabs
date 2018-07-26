@@ -1,9 +1,9 @@
 /*----------  Vendor Imports  ----------*/
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import io from 'socket.io-client';
 
 /*----------  Custom Imports  ----------*/
 import {
@@ -22,8 +22,29 @@ class Chat extends Component {
   constructor(props) {
     super(props);
     this.socket = io({
-
+      path: '/chat',
+      autoConnect: false,
+      extraHeaders: {
+        authorization: props.token,
+      },
     });
+    this.bindSocketEvents();
+  }
+
+  bindSocketEvents() {
+    this.socket.on('connect', this.onConnect.bind(this));
+    this.socket.on('disconnect', this.onDisconnect.bind(this));
+    this.socket.open();
+  }
+
+  onConnect() {
+    console.log(`Connected! Socket ID : ${this.socket.id}`);
+    this.props.setConnectionState(true);
+  }
+
+  onDisconnect() {
+    console.log('Socket Disconnected :(');
+    this.props.setConnectionState(false);
   }
 
   render() {
@@ -42,11 +63,19 @@ const mapStateToProps = state => ({
   token: state.userState.token,
 });
 
+const mapDispatchToProps = dispatch => ({
+  setConnectionState: connected => dispatch({
+    type: 'SET_CONNECTION_STATE',
+    connected: connected,
+  }),
+});
+
 Chat.propTypes = {
   token: PropTypes.string.isRequired,
+  setConnectionState: PropTypes.func.isRequired,
 };
 
-export default withAuthorization(connect(mapStateToProps)(Chat));
+export default withAuthorization(connect(mapStateToProps, mapDispatchToProps)(Chat));
 
 /*=====  End of Chat Component  ======*/
 
