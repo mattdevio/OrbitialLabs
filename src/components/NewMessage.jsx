@@ -3,62 +3,87 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-/*----------  Custom Imports  ----------*/
-import Speech from 'bin/SpeechRecognition';
+
+// --- Speech Recognition ---
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+recognition.continuous = true;
 
 /*=========================================
-=           New Message Component         =
-=========================================*/
+ =           New Message Component         =
+ =========================================*/
 
 class NewMessage extends Component {
 
   constructor(props) {
+
     super(props);
     this.state = {
       message: '',
       isRecording: false,
+      image: '',
     };
-    this.setupSpeechEvents();
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleMicrophone = this.handleMicrophone.bind(this);
     this.handleMessage = this.handleMessage.bind(this);
-  }
-
-  setupSpeechEvents() {
-    const { recognition } = Speech.getInstance();
-    recognition.onstart = () => this.setState({ isRecording: true });
-    recognition.onspeechend = () => this.setState({ isRecording: false });
-    recognition.onerror = (event) => {
-      if (event.error === 'no-speech') this.setState({ isRecording: false });
-    };
-    recognition.onresult = (event) => {
-      console.log(event);
-      const index = event.resultIndex;
-      const transcript = event.results[index][0].transcript;
-      const repeat = (index === 1 && transcript === event.results[0][0].transcript);
-      if (!repeat) this.setState({ message: `${this.state.message} ${transcript}` });
-    };
+    this.handleImage = this.handleImage.bind(this);
+    this.handleImageSubmit = this.handleImageSubmit.bind(this);
   }
 
   handleSubmit(event) {
+
     event.preventDefault();
-    const s = { message: this.state.message };
-    s.message = s.message.trim();
-    if (!s.message) {
-      return this.setState(s);
-    } else {
-      console.log(`sending: ${s.message}`);
-      this.setState({message: ''});
-    }
+  }
+
+  handleImageSubmit(event) {
+
+    event.preventDefault();
   }
 
   handleMicrophone() {
-    const { isRecording } = this.state;
-    const { recognition } = Speech.getInstance();
+
+    const self = this;
+    const {
+        message,
+        isRecording,
+    } = this.state;
+
     if (!isRecording) {
+
+      // start recording
       recognition.start();
+
+      // record start
+      recognition.onstart = () => self.setState({ isRecording: true });
+
+      // record end
+      recognition.onspeechend = () => self.setState({ isRecording: false });
+
+      // record error
+      recognition.onerror = (event) => {
+        if (event.error === 'no-speech') self.setState({ isRecording: false });
+      };
+
+      // record result
+      recognition.onresult = (event) => {
+
+        // captured response
+        const index = event.resultIndex;
+        const transcript = event.results[index][0].transcript;
+
+        // error handler for some mobile devices
+        const repeat = (index === 1 && transcript === event.results[0][0].transcript);
+
+        // update message
+        if (!repeat) self.setState({ message: `${message} ${transcript}` });
+      };
+
     } else {
+
+      // stop recording
       recognition.stop();
+      this.setState({ isRecording: false });
     }
   }
 
@@ -66,27 +91,35 @@ class NewMessage extends Component {
     this.setState({ message: event.target.value });
   }
 
+  handleImage(event) {
+    this.setState({ image: event.target.value });
+  }
+
   render() {
 
     const {
-      message,
-      isRecording,
+        message,
+        isRecording,
     } = this.state;
 
     return (
-      <NewMessageContainer>
-        <SpeechToTextContainer>
-          <StyledFontAwesomeIcon 
-            icon={ isRecording ? 'circle-notch' : 'microphone' }
-            recording={ isRecording.toString() }
-            onClick={ this.handleMicrophone }
-          />
-        </SpeechToTextContainer>
-        <NewMessageForm onSubmit={this.handleSubmit}>
-          <MessageInput type='text' placeholder='Type something...' value={message} onChange={this.handleMessage} />
-          <MessageSubmit type='submit' value='ADD MESSAGE' />
-        </NewMessageForm>
-      </NewMessageContainer>
+        <NewMessageContainer>
+          <SpeechToTextContainer>
+            <StyledFontAwesomeIcon
+                icon={ isRecording ? 'circle-notch' : 'microphone' }
+                recording={ isRecording.toString() }
+                onClick={ this.handleMicrophone }
+            />
+          </SpeechToTextContainer>
+          <NewMessageForm onSubmit={this.handleSubmit}>
+            <MessageInput type='text' placeholder='Type something...' value={message} onChange={this.handleMessage} />
+            <MessageSubmit type='submit' value='ADD MESSAGE' />
+          </NewMessageForm>
+          <GiphyForm onSubmit={this.handleImageSubmit}>
+            <GiphyInput type='text' placeholder='Search an Image' value={this.image} onChange={this.handleImage}/>
+            <GiphySubmit type='submit' value="Add Image" />
+          </GiphyForm>
+        </NewMessageContainer>
     );
   }
 }
@@ -118,7 +151,7 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 const NewMessageForm = styled.form`
   display: flex;
   justify-content: space-evenly;
-  width: 100%;
+  width: 50%;
 `;
 
 const MessageInput = styled.input`
@@ -133,6 +166,40 @@ const MessageInput = styled.input`
 `;
 
 const MessageSubmit = styled.input`
+  align-self: center;
+  background: #FF6077;
+  border: 0;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  height: 40px;
+  letter-spacing: 1px;
+  margin: 0 10px;
+  width: 300px;
+  &:focus {
+    outline: none;
+  }
+  cursor: pointer;
+`;
+
+const GiphyForm = styled.form`
+  display: flex;
+  justify-content: space-evenly;
+  width: 50%;
+`;
+
+const GiphyInput = styled.input`
+  border: 0;
+  color: #8e8e8e;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  width: 100%;
+  &:focus {
+    outline: none;
+  }
+`;
+
+const GiphySubmit = styled.input`
   align-self: center;
   background: #FF6077;
   border: 0;
