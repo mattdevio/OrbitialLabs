@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 
 /*----------  Custom Imports  ----------*/
 import userReducer from './user';
+import chatReducer from './chat';
 
 /*========================================
 =            Combine Reducers            =
@@ -10,6 +11,7 @@ import userReducer from './user';
 
 const rootReducer = combineReducers({
   userState: userReducer,
+  chatState: chatReducer,
 });
 
 export default rootReducer;

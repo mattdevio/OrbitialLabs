@@ -3,11 +3,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
-// --- Speech Recognition ---
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = new SpeechRecognition();
-recognition.continuous = true;
+/*----------  Custom Imports  ----------*/
+import Speech from 'bin/SpeechRecognition';
 
 /*=========================================
 =           New Message Component         =
@@ -16,66 +13,52 @@ recognition.continuous = true;
 class NewMessage extends Component {
 
   constructor(props) {
-
     super(props);
     this.state = {
       message: '',
       isRecording: false,
     };
-
+    this.setupSpeechEvents();
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleMicrophone = this.handleMicrophone.bind(this);
     this.handleMessage = this.handleMessage.bind(this);
   }
 
-  handleSubmit(event) {
+  setupSpeechEvents() {
+    const { recognition } = Speech.getInstance();
+    recognition.onstart = () => this.setState({ isRecording: true });
+    recognition.onspeechend = () => this.setState({ isRecording: false });
+    recognition.onerror = (event) => {
+      if (event.error === 'no-speech') this.setState({ isRecording: false });
+    };
+    recognition.onresult = (event) => {
+      console.log(event);
+      const index = event.resultIndex;
+      const transcript = event.results[index][0].transcript;
+      const repeat = (index === 1 && transcript === event.results[0][0].transcript);
+      if (!repeat) this.setState({ message: `${this.state.message} ${transcript}` });
+    };
+  }
 
+  handleSubmit(event) {
     event.preventDefault();
+    const s = { message: this.state.message };
+    s.message = s.message.trim();
+    if (!s.message) {
+      return this.setState(s);
+    } else {
+      console.log(`sending: ${s.message}`);
+      this.setState({message: ''});
+    }
   }
 
   handleMicrophone() {
-
-    const self = this;
-    const {
-      message,
-      isRecording,
-    } = this.state;
-
+    const { isRecording } = this.state;
+    const { recognition } = Speech.getInstance();
     if (!isRecording) {
-
-      // start recording
       recognition.start();
-
-      // record start
-      recognition.onstart = () => self.setState({ isRecording: true });
-
-      // record end
-      recognition.onspeechend = () => self.setState({ isRecording: false });
-
-      // record error
-      recognition.onerror = (event) => {
-        if (event.error === 'no-speech') self.setState({ isRecording: false });
-      };
-
-      // record result
-      recognition.onresult = (event) => {
-
-        // captured response
-        const index = event.resultIndex;
-        const transcript = event.results[index][0].transcript;
-
-        // error handler for some mobile devices
-        const repeat = (index === 1 && transcript === event.results[0][0].transcript);
-
-        // update message
-        if (!repeat) self.setState({ message: `${message} ${transcript}` });
-      };
-
     } else {
-
-      // stop recording
       recognition.stop();
-      this.setState({ isRecording: false });
     }
   }
 

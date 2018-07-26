@@ -16,16 +16,16 @@ class NewMessage extends Component {
     super(props);
     this.state = {
       messages: [
-        {
-          id: 0,
-          username: 'test1',
-          message: 'Hello World',
-        },
-        {
-          id: 1,
-          username: 'user2',
-          message: 'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum',
-        },
+        // {
+        //   id: 0,
+        //   username: 'test1',
+        //   message: 'Hello World',
+        // },
+        // {
+        //   id: 1,
+        //   username: 'user2',
+        //   message: 'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum',
+        // },
       ],
     };
   }
