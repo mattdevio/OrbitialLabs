@@ -11,7 +11,9 @@ import {
   NewMessage,
   MessageList,
   withAuthorization,
+  Giphy,
 } from 'components';
+
 
 /*=========================================
 =            Chat Component            =
@@ -70,6 +72,7 @@ class Chat extends Component {
         <DescriptionContainer>
           <NewMessage sendMessage={ this.sendNewMessage } />
           <MessageList />
+          <Giphy search="dog" />
         </DescriptionContainer>
       </CenterStack>
     );
