@@ -26,7 +26,7 @@ const addMessage = (state, { username, message, id }) => {
   if (!username || !message || !id) return state;
   const newMessage = { username, message, id };
   const newState = cloneDeep(state);
-  newState.messages.push(newMessage);
+  newState.messages.unshift(newMessage);
   return newState;
 };
 
