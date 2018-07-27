@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PropTypes from 'prop-types';
 
 /*----------  Custom Imports  ----------*/
 import Speech from 'bin/SpeechRecognition';
@@ -18,7 +19,10 @@ class NewMessage extends Component {
       message: '',
       isRecording: false,
     };
-    this.setupSpeechEvents();
+    const { recognition } = Speech.getInstance();
+    if (recognition) {
+      this.setupSpeechEvents();
+    }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleMicrophone = this.handleMicrophone.bind(this);
     this.handleMessage = this.handleMessage.bind(this);
@@ -47,7 +51,7 @@ class NewMessage extends Component {
     if (!s.message) {
       return this.setState(s);
     } else {
-      console.log(`sending: ${s.message}`);
+      this.props.sendMessage(s.message);
       this.setState({message: ''});
     }
   }
@@ -90,6 +94,10 @@ class NewMessage extends Component {
     );
   }
 }
+
+NewMessage.propTypes = {
+  sendMessage: PropTypes.func.isRequired,
+};
 
 export default NewMessage;
 
