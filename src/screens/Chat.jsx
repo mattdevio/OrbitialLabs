@@ -1,6 +1,9 @@
 /*----------  Vendor Imports  ----------*/
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PropTypes from 'prop-types';
 
 /*----------  Custom Imports  ----------*/
 import {
@@ -13,8 +16,12 @@ import {
 =            Chat Component            =
 =========================================*/
 
-const Chat = () => (
+const Chat = props => (
   <CenterStack>
+    <CurrentUser>
+      <UserIcon icon='user-astronaut'></UserIcon>
+      <Username>{props.username}</Username>
+    </CurrentUser>
     <DescriptionContainer>
       <NewMessage />
       <MessageList />
@@ -22,7 +29,15 @@ const Chat = () => (
   </CenterStack>
 );
 
-export default withAuthorization(Chat);
+const mapStateToProps = state => ({
+  username: state.userState.username,
+});
+
+Chat.propTypes = {
+  username: PropTypes.string,
+};
+
+export default withAuthorization(connect(mapStateToProps, null)(Chat));
 
 /*=====  End of Chat Component  ======*/
 
@@ -39,6 +54,27 @@ const CenterStack = styled.div`
   position: absolute;
   top: 0;
   left: 0;
+`;
+
+const CurrentUser = styled.article`
+  align-items: center;
+  display: flex;
+  height: 26px;
+  justify-content: flex-end;
+  max-width: 800px;
+  width: 100%;
+`;
+
+const Username = styled.div`
+  color: #fff;
+  font-size: 16px;
+  letter-spacing: 1px;
+  padding: 0 10px;
+`;
+
+const UserIcon = styled(FontAwesomeIcon)`
+  color: #fff;
+  font-size: 26px;
 `;
 
 const DescriptionContainer = styled.article`
