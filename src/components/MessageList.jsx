@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 /*----------  Custom Imports  ----------*/
 import Message from './Message';
+import Giphy from './Giphy';
 
 /*=========================================
 =           Message List Component         =
@@ -41,6 +42,7 @@ class NewMessage extends Component {
           <MessageList>{list}</MessageList> :
           <DescriptionHeader />
         }
+        <Giphy search="dog" />
       </MessageListContainer>
     );
   }
