@@ -9,6 +9,7 @@ import ThreeIconGroup from './ThreeIconGroup';
 import withAuthentication from './withAuthentication';
 import withAuthorization from './withAuthorization';
 import routeAuthorizedUsers from './routeAuthorizedUsers';
+import Giphy from './Giphy';
 
 export {
   Header,
@@ -19,4 +20,5 @@ export {
   withAuthentication,
   withAuthorization,
   routeAuthorizedUsers,
+  Giphy,
 };

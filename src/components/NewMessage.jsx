@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 /*----------  Custom Imports  ----------*/
 import Speech from 'bin/SpeechRecognition';
 
+
 /*=========================================
 =           New Message Component         =
 =========================================*/
@@ -18,6 +19,7 @@ class NewMessage extends Component {
     this.state = {
       message: '',
       isRecording: false,
+      image: '',
     };
     const { recognition } = Speech.getInstance();
     if (recognition) {
@@ -26,6 +28,8 @@ class NewMessage extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleMicrophone = this.handleMicrophone.bind(this);
     this.handleMessage = this.handleMessage.bind(this);
+    this.handleImage = this.handleImage.bind(this);
+    this.handleImageSubmit = this.handleImageSubmit.bind(this);
   }
 
   setupSpeechEvents() {
@@ -70,6 +74,14 @@ class NewMessage extends Component {
     this.setState({ message: event.target.value });
   }
 
+  handleImageSubmit(event) {
+    event.preventDefault();
+  }
+
+  handleImage(event) {
+    this.setState({ image: event.target.value });
+  }
+
   render() {
 
     const {
@@ -90,6 +102,10 @@ class NewMessage extends Component {
           <MessageInput type='text' placeholder='Type something...' value={message} onChange={this.handleMessage} />
           <MessageSubmit type='submit' value='ADD MESSAGE' />
         </NewMessageForm>
+        <GiphyForm onSubmit={this.handleImageSubmit}>
+          <GiphyInput type='text' placeholder='Search an Image' value={this.image} onChange={this.handleImage}/>
+          <GiphySubmit type='submit' value="Add Image" />
+        </GiphyForm>
       </NewMessageContainer>
     );
   }
@@ -126,7 +142,7 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
 const NewMessageForm = styled.form`
   display: flex;
   justify-content: space-evenly;
-  width: 100%;
+  width: 50%;
 `;
 
 const MessageInput = styled.input`
@@ -141,6 +157,40 @@ const MessageInput = styled.input`
 `;
 
 const MessageSubmit = styled.input`
+  align-self: center;
+  background: #FF6077;
+  border: 0;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  height: 40px;
+  letter-spacing: 1px;
+  margin: 0 10px;
+  width: 300px;
+  &:focus {
+    outline: none;
+  }
+  cursor: pointer;
+`;
+
+const GiphyForm = styled.form`
+  display: flex;
+  justify-content: space-evenly;
+  width: 50%;
+`;
+
+const GiphyInput = styled.input`
+  border: 0;
+  color: #8e8e8e;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  width: 100%;
+  &:focus {
+    outline: none;
+  }
+`;
+
+const GiphySubmit = styled.input`
   align-self: center;
   background: #FF6077;
   border: 0;
