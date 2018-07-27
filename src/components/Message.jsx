@@ -122,7 +122,6 @@ class Message extends Component {
 }
 
 Message.propTypes = {
-  data: PropTypes.object.isRequired,
   message: PropTypes.string,
   username: PropTypes.string,
 };
