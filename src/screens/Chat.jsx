@@ -29,12 +29,18 @@ class Chat extends Component {
       },
     });
     this.bindSocketEvents();
+    this.sendNewMessage = this.sendNewMessage.bind(this);
   }
 
   bindSocketEvents() {
     this.socket.on('connect', this.onConnect.bind(this));
     this.socket.on('disconnect', this.onDisconnect.bind(this));
+    this.socket.on('message', this.onMessage.bind(this));
     this.socket.open();
+  }
+
+  onMessage(payload) {
+    this.props.addNewMessage(payload.username, payload.message, payload.id);
   }
 
   onConnect() {
@@ -47,11 +53,18 @@ class Chat extends Component {
     this.props.setConnectionState(false);
   }
 
+  sendNewMessage(message) {
+    this.socket.emit('new message', {
+      username: this.props.username,
+      message: message,
+    });
+  }
+
   render() {
     return (
       <CenterStack>
         <DescriptionContainer>
-          <NewMessage />
+          <NewMessage sendMessage={ this.sendNewMessage } />
           <MessageList />
         </DescriptionContainer>
       </CenterStack>
@@ -61,6 +74,7 @@ class Chat extends Component {
 
 const mapStateToProps = state => ({
   token: state.userState.token,
+  username: state.userState.username,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -68,11 +82,19 @@ const mapDispatchToProps = dispatch => ({
     type: 'SET_CONNECTION_STATE',
     connected: connected,
   }),
+  addNewMessage: (username, message, id) => dispatch({
+    type: 'ADD_MESSAGE',
+    username,
+    message,
+    id,
+  }),
 });
 
 Chat.propTypes = {
   token: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
   setConnectionState: PropTypes.func.isRequired,
+  addNewMessage: PropTypes.func.isRequired,
 };
 
 export default withAuthorization(connect(mapStateToProps, mapDispatchToProps)(Chat));

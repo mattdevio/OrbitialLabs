@@ -5,24 +5,47 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 /*----------  Custom Imports  ----------*/
-import Message from './Message';
+import { Message } from 'components';
 
 /*=========================================
 =           Message List Component         =
 =========================================*/
 
 class MessageBox extends Component {
-  
+
+  constructor(props) {
+    super(props);
+    this.renderMessages = this.renderMessages.bind(this);
+  }
+
+  renderMessages() {
+    const { messages } = this.props;
+    return (
+      <MessageList>
+        {messages.map(payload => (
+          <Message
+            username={ payload.username }
+            message={ payload.message }
+            key={ payload.id }
+          />
+        ))}
+      </MessageList>
+    );
+  }
+
+  componentDidUpdate() {
+    console.log(this.props);
+  }
+
   render() {
-    const { connected } = this.props;
+    const { connected, messages } = this.props;
     return (
       <MessageListContainer>
         <ConnectionStatus
           connected={ connected }
           show={ !connected }
         />
-
-        <DescriptionHeader />
+        { messages.length ? this.renderMessages() : <DescriptionHeader /> }
       </MessageListContainer>
     );
   }
@@ -30,10 +53,16 @@ class MessageBox extends Component {
 
 const mapStateToProps = state => ({
   connected: state.chatState.connected,
+  messages: state.chatState.messages,
 });
 
 MessageBox.propTypes = {
   connected: PropTypes.bool.isRequired,
+  messages: PropTypes.arrayOf(PropTypes.shape({
+    username: PropTypes.string,
+    message: PropTypes.string,
+    id: PropTypes.string,
+  })),
 };
 
 export default connect(mapStateToProps)(MessageBox);

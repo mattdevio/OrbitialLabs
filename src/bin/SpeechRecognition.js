@@ -5,9 +5,13 @@
 class Speech {
 
   constructor() {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    this.recognition = new SpeechRecognition();
-    this.recognition.continuous = true;
+    try { 
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      this.recognition = new SpeechRecognition();
+      this.recognition.continuous = true;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   static getInstance() {

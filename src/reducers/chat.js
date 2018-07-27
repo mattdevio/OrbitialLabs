@@ -1,3 +1,6 @@
+/*----------  Subsection comment block  ----------*/
+import cloneDeep from 'lodash.clonedeep';
+
 /*----------  Initial State  ----------*/
 const INITIAL_STATE = {
   messages: [],
@@ -19,6 +22,14 @@ const setConnectionState = (state, { connected }) => {
   };
 };
 
+const addMessage = (state, { username, message, id }) => {
+  if (!username || !message || !id) return state;
+  const newMessage = { username, message, id };
+  const newState = cloneDeep(state);
+  newState.messages.push(newMessage);
+  return newState;
+};
+
 
 /*=============================================
 =            Section comment block            =
@@ -31,6 +42,8 @@ function chatReducer(state = INITIAL_STATE, action) {
       return setInitialMessages(state, action);
     case 'SET_CONNECTION_STATE':
       return setConnectionState(state, action);
+    case 'ADD_MESSAGE':
+      return addMessage(state, action);
     default:
       return state;
   }

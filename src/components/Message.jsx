@@ -77,10 +77,8 @@ class Message extends Component {
   render() {
 
     const {
-      data: {
-        message,
-        username,
-      },
+      message,
+      username,
     } = this.props;
 
     const {
