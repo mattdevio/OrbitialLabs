@@ -49,7 +49,7 @@ app.use('/assets', express.static(path.resolve(__dirname, './assets')));
 app.use('/favicon.ico', express.static(path.resolve(__dirname, './assets/images/favicon.png')));
 
 // Open mongoose DB connection
-mongoose.connect('mongodb://localhost:27017/PublicSquare', { useNewUrlParser: true });
+mongoose.connect('mongodb://mongodb:27017/PublicSquare', { useNewUrlParser: true });
 
 // Bind Listening Port
 server.listen(config.port, () => {
