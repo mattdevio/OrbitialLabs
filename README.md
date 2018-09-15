@@ -47,6 +47,17 @@ npm run mongo:stop
 
 _Please Note: This project uses **ES-LINT** to help maintain coding standards. Please install your editor's **ES-LINT** plugin for inline linting feedback._
 
+### Docker
+
+Project was Dockerized for easy stand up / tear down. All you need is [Docker CE](https://www.docker.com/get-started).
+
+```
+// Start Project
+$ docker-compose up
+
+// Stop Project
+$ docker-compose down
+```
 
 <h2 align="center">Maintainers</h2>
 
@@ -55,9 +66,9 @@ _Please Note: This project uses **ES-LINT** to help maintain coding standards. P
     <tr>
       <td align="center">
         <img width="150" height="150"
-        src="https://github.com/mattgreenberg.png?v=3&s=150">
+        src="https://github.com/mattdevio.png?v=3&s=150">
         </br>
-        <a href="https://github.com/mattgreenberg">Matt Greenberg</a>
+        <a href="https://github.com/mattdevio">Matt Greenberg</a>
       </td>
       <td align="center">
         <img width="150" height="150"
